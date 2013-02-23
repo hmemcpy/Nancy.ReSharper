@@ -1,0 +1,23 @@
+<assembly name="Nancy">
+  <member name="T:Nancy.NancyModule">
+    <attribute ctor="M:JetBrains.Annotations.UsedImplicitlyAttribute.#ctor(JetBrains.Annotations.ImplicitUseKindFlags)">
+      <argument>1</argument>
+    </attribute>
+  </member>
+  <member name="T:Nancy.Bootstrapper.INancyBootstrapper">
+    <attribute ctor="M:JetBrains.Annotations.UsedImplicitlyAttribute.#ctor(JetBrains.Annotations.ImplicitUseKindFlags)">
+      <argument>1</argument>
+    </attribute>
+  </member>
+  
+  <member name="P:Nancy.NancyModule.ViewRenderer.Item(System.String)">
+    <parameter name="viewName">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcViewAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="P:Nancy.NancyModule.ViewRenderer.Item(System.String,System.Object)">
+    <parameter name="viewName">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcViewAttribute.#ctor" />
+    </parameter>
+  </member>
+ </assembly>
