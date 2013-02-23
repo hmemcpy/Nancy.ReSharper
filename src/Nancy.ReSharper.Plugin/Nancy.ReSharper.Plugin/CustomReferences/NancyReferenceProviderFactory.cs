@@ -2,6 +2,7 @@
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.DataContext;
+using JetBrains.ReSharper.Feature.Services.Asp.CSharp.CustomReferences;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -12,14 +13,14 @@ using System;
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     [ReferenceProviderFactory]
-    public class NancyMvcReferenceProviderFactory : IReferenceProviderFactory
+    public class NancyReferenceProviderFactory : IReferenceProviderFactory
     {
         private readonly ISolution solution;
         private readonly IProperty<bool> isMvcEnabled;
 
         public event Action OnChanged = delegate { };
 
-        public NancyMvcReferenceProviderFactory(Lifetime lifetime, ISolution solution, ISettingsStore settingsStore, MvcReferenceProviderValidator providerValidator)
+        public NancyReferenceProviderFactory(Lifetime lifetime, ISolution solution, ISettingsStore settingsStore, MvcReferenceProviderValidator providerValidator)
         {
             this.solution = solution;
             isMvcEnabled = settingsStore.BindToContextLive(lifetime, ContextRange.Smart(solution.ToDataContext()))
@@ -42,11 +43,16 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             if (!NancyCustomReferencesSettings.IsApplied(isMvcEnabled, projectFile, out version))
                 return null;
 
-            //Version version;
-            //if (!MvcCustomReferencesSettingsEx.IsApplied(isMvcEnabled, projectFile, out version))
-            //    return null;
-            
-            return new NancyReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
+
+            return CreateCSharpMvcReferenceProvider(solution.GetComponent<MvcIndexer>(), version);
+        }
+
+        private IReferenceFactory CreateCSharpMvcReferenceProvider(MvcIndexer indexer, Version version)
+        {
+            Type type = typeof(CSharpMvcReferenceProviderFactory).Assembly.GetType(
+                "JetBrains.ReSharper.Feature.Services.Asp.CSharp.CustomReferences.CSharpMvcReferenceProvider");
+
+            return (IReferenceFactory)Activator.CreateInstance(type, new object[] { indexer, version });
         }
 
         private void FireOnChanged()

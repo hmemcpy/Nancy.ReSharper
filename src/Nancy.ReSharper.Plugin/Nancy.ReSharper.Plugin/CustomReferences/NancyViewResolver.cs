@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.Util;
@@ -35,10 +34,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         public IDictionary<MvcViewLocationType, ICollection<string>> Values
         {
-            get
-            {
-                return DefaultViewLocations;
-            }
+            get { return DefaultViewLocations; }
         }
     }
 }

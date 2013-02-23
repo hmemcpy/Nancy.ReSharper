@@ -6,7 +6,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Daemon;
 using JetBrains.ReSharper.Daemon.Asp.Stages;
 using JetBrains.ReSharper.Daemon.UsageChecking;
-using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Search;
 using Nancy.ReSharper.Plugin.CustomReferences;
@@ -17,12 +16,10 @@ namespace Nancy.ReSharper.Plugin.Daemon
     public class NancyDaemonStage : IDaemonStage
     {
         private readonly SearchDomainFactory searchDomainFactory;
-        private readonly ISettingsOptimization settingsOptimization;
 
-        public NancyDaemonStage(SearchDomainFactory searchDomainFactory, ISettingsOptimization settingsOptimization)
+        public NancyDaemonStage(SearchDomainFactory searchDomainFactory)
         {
             this.searchDomainFactory = searchDomainFactory;
-            this.settingsOptimization = settingsOptimization;
         }
 
         public IEnumerable<IDaemonStageProcess> CreateProcess(IDaemonProcess process, IContextBoundSettingsStore settings, DaemonProcessKind processKind)
@@ -42,10 +39,10 @@ namespace Nancy.ReSharper.Plugin.Daemon
 
             return new[]
             {
-                new NancyDaemonStageProcess(searchDomainFactory,
-                                            process,
-                                            process.GetStageProcess<CollectUsagesStageProcess>(),
-                                            settings)
+                new MvcDaemonStageProcess(searchDomainFactory,
+                                          process,
+                                          process.GetStageProcess<CollectUsagesStageProcess>(),
+                                          settings)
             };
         }
 

@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExposedObject">
-      <HintPath>..\..\packages\ExposedObject.1.1.0.0\lib\net40\ExposedObject.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -49,23 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
-    <Compile Include="CustomReferences\NancyIndexer.cs" />
-    <Compile Include="CustomReferences\NancyMvcControllerReference.cs" />
-    <Compile Include="CustomReferences\NancyMvcAreaReference.cs" />
-    <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
-    <Compile Include="CustomReferences\NancyMvcActionReference.cs" />
-    <Compile Include="CustomReferences\NancyMvcReferenceProviderFactory.cs" />
-    <Compile Include="CustomReferences\NancyReferenceProviderBase.cs" />
-    <Compile Include="CustomReferences\NancyUtil.cs" />
+    <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
     <Compile Include="CustomReferences\NancyViewResolver.cs" />
-    <Compile Include="CustomReferences\NancyMvcReferenceProvider.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
-    <Compile Include="Daemon\NancyDaemonStageProcess.cs" />
-    <Compile Include="Daemon\NancyElementsCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.1</ReSharperSdkTargets>
