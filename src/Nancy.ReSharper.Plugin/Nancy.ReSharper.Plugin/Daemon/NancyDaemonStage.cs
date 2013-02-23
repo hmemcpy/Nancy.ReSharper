@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Settings;
-using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Daemon;
 using JetBrains.ReSharper.Daemon.Asp.Stages;
@@ -10,20 +9,20 @@ using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Search;
-using JetBrains.ReSharper.Psi.Web.Util;
+using Nancy.ReSharper.Plugin.CustomReferences;
 
 namespace Nancy.ReSharper.Plugin.Daemon
 {
     [DaemonStage(StagesBefore = new[] { typeof(LanguageSpecificDaemonStage), typeof(CollectUsagesStage) })]
     public class NancyDaemonStage : IDaemonStage
     {
-        private static readonly AssemblyNameInfo NancyAssemblyName = new AssemblyNameInfo("Nancy");
-        
         private readonly SearchDomainFactory searchDomainFactory;
+        private readonly ISettingsOptimization settingsOptimization;
 
-        public NancyDaemonStage(SearchDomainFactory searchDomainFactory)
+        public NancyDaemonStage(SearchDomainFactory searchDomainFactory, ISettingsOptimization settingsOptimization)
         {
             this.searchDomainFactory = searchDomainFactory;
+            this.settingsOptimization = settingsOptimization;
         }
 
         public IEnumerable<IDaemonStageProcess> CreateProcess(IDaemonProcess process, IContextBoundSettingsStore settings, DaemonProcessKind processKind)
@@ -43,10 +42,10 @@ namespace Nancy.ReSharper.Plugin.Daemon
 
             return new[]
             {
-                new MvcDaemonStageProcess(searchDomainFactory,
-                                          process,
-                                          process.GetStageProcess<CollectUsagesStageProcess>(),
-                                          settings)
+                new NancyDaemonStageProcess(searchDomainFactory,
+                                            process,
+                                            process.GetStageProcess<CollectUsagesStageProcess>(),
+                                            settings)
             };
         }
 
@@ -55,10 +54,10 @@ namespace Nancy.ReSharper.Plugin.Daemon
             return ErrorStripeRequest.NONE;
         }
 
-        private static bool IsNancyProject(IProjectFile projectFile)
+        internal static bool IsNancyProject(IProjectElement project)
         {
-            AssemblyNameInfo referencedAssembly;
-            return ReferencedAssembliesService.IsProjectReferencingAssemblyByName(projectFile, NancyAssemblyName, out referencedAssembly);
+            Version version;
+            return NancyCustomReferencesSettings.IsProjectReferencingNancy(project, out version);
         }
     }
 }
