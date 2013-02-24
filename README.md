@@ -28,8 +28,8 @@ Why don't you **download the plugin** and find out?
 
 **Latest version: v0.1.0**
 
-For the list of currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
+For the list of currently supported features, please visit the [[wiki]].
 
 ## Bugs? Questions? Suggestions?
 
-Please feel free to [report them](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/issues)!
+Please feel free to [report them](issues)!
