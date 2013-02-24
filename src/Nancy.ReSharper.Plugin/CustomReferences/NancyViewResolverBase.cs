@@ -21,7 +21,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 {
                     MvcViewLocationType.View, GetAllPaths(
                         "~\\{0}",
-                        "~\\views\\{0}"
+                        "~\\views\\{0}",
+                        "~\\{1}\\{0}",
+                        "~\\views\\{1}\\{0}"
                         )
                 }
             };
