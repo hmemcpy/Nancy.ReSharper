@@ -31,7 +31,7 @@
           </DownloadUri>
           <CompanyName>Igal Tabachnik</CompanyName>
           <ProductName>Nancy plugin for ReSharper</ProductName>
-          <ProductVersion><xsl:value-of select="concat($LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.0')"/></ProductVersion>
+          <ProductVersion><xsl:value-of select="concat($LatestMajor, '.', $LatestMinor, '.', $LatestBuild)"/></ProductVersion>
           <PriceTag />
           <IsFree>true</IsFree>
           <!--<IconData>
