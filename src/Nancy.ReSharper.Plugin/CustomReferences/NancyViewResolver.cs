@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.Util;
@@ -17,14 +19,19 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             {
                 { MvcViewLocationType.Unknown, EmptyList<string>.InstanceList },
                 {
-                    MvcViewLocationType.View, new[]
-                    {
-                        "~\\{0}.html",
-                        "~\\{0}.htm",
-                        "~\\{0}.sshtml",
-                    }
+                    MvcViewLocationType.View, GetAllPaths(
+                        "~\\{0}",
+                        "~\\views\\{0}"
+                    )
                 }
             };
+        }
+
+        private static string[] GetAllPaths(params string[] viewLocations)
+        {
+            var allExtensions = new[] { ".htm", ".html", ".sshtml" };
+
+            return viewLocations.SelectMany(view => allExtensions.Select(extension => view + extension)).ToArray();
         }
 
         public bool IsApplicable(IProject project)
