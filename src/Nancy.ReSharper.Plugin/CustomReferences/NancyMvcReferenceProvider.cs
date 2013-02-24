@@ -67,7 +67,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return new NancyMvcAreaReference(literal);
         }
 
-        protected override MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration> GetMvcViewReference([NotNull] IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
+        protected override MvcViewReferenceBase<ICSharpLiteralExpression, IMethodDeclaration> GetMvcViewReference([NotNull] IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
         {
             return new NancyMvcViewReference(literal, names, mvcKind, version);
         }

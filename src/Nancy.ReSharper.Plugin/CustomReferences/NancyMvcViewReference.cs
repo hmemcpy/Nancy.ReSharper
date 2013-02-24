@@ -10,7 +10,7 @@ using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
-    public class NancyMvcViewReference : MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>, ISmartCompleatebleReference
+    public class NancyMvcViewReference : MvcViewReferenceBase<ICSharpLiteralExpression, IMethodDeclaration>, ISmartCompleatebleReference
     {
         public NancyMvcViewReference([NotNull] IExpression owner, [NotNull] ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
             : base(owner, names, mvcKind, version)

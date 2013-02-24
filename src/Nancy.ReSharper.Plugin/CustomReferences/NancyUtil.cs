@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
@@ -101,11 +102,11 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         {
             ITypeElement[] typeElements;
 
-            IMvcElementsCache mvcElementsCache = MvcElementsCache.GetInstance(module);
+            ITypeElement nancyModuleInterface = TypeFactory.CreateTypeByCLRName("Nancy.INancyModule", module).GetTypeElement();
+
             if (baseClass != null)
             {
-                if (baseClass.IsDescendantOf(mvcElementsCache.MvcControllerInterface) ||
-                    baseClass.IsDescendantOf(mvcElementsCache.MvcHttpControllerInterface))
+                if (baseClass.IsDescendantOf(nancyModuleInterface))
                 {
                     typeElements = new[] { baseClass };
                 }
@@ -116,39 +117,24 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
             else
             {
-                typeElements = new[]
-                { mvcElementsCache.MvcControllerInterface, mvcElementsCache.MvcHttpControllerInterface };
+                typeElements = new[] {  nancyModuleInterface };
             }
 
             var found = new List<IClass>();
-            foreach (ITypeElement typeElement in typeElements)
+            foreach (ITypeElement typeElement in typeElements.WhereNotNull())
             {
-                if (typeElement == null)
-                {
-                    continue;
-                }
-                if (typeElement is IClass)
-                {
-                    found.Add((IClass)typeElement);
-                }
-                module.GetPsiServices()
-                      .Finder.FindInheritors(typeElement, searchDomain, found.ConsumeDeclaredElements(),
-                                             NullProgressIndicator.Instance);
+                module.GetPsiServices().Finder.FindInheritors(typeElement, searchDomain, found.ConsumeDeclaredElements(), NullProgressIndicator.Instance);
             }
 
             IEnumerable<IClass> classes = found.Where(@class => @class.GetAccessRights() == AccessRights.PUBLIC);
             if (!includingIntermediateControllers)
             {
-                classes = classes
-                    .Where(
-                        @class =>
-                        !@class.IsAbstract &&
+                classes = classes.Where(@class =>!@class.IsAbstract &&
                         @class.ShortName.EndsWith(ModuleClassSuffix, StringComparison.OrdinalIgnoreCase));
             }
 
             return new OneToListMap<string, IClass>(
-                classes.GroupBy(GetControllerName,
-                                (name, enumerable) => new KeyValuePair<string, IList<IClass>>(name, enumerable.ToList())),
+                classes.GroupBy(GetControllerName, (name, enumerable) => new KeyValuePair<string, IList<IClass>>(name, enumerable.ToList())),
                 StringComparer.OrdinalIgnoreCase);
         }
 
@@ -390,21 +376,19 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return FileSystemPath.Empty;
         }
 
-        public static IEnumerable<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> GetModules(
-            [CanBeNull] IArgumentsOwner argumentsOwner)
+        public static IEnumerable<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> GetModules([CanBeNull] IArgumentsOwner argumentsOwner)
         {
             if ((argumentsOwner == null) || !argumentsOwner.IsValid())
             {
                 return EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>.InstanceList;
             }
-            return argumentsOwner.UserData.GetOrCreateData(ourCachedControllersKey,
-                                                  () => argumentsOwner.CreateCachedValue(
-                                                      GetControllersNonCached(argumentsOwner)))
-                                 .GetValue(argumentsOwner, () => GetControllersNonCached(argumentsOwner));
+
+            var cachedData = argumentsOwner.UserData.GetOrCreateData(ourCachedControllersKey, () => argumentsOwner.CreateCachedValue(GetModulesNotCached(argumentsOwner)));
+
+            return cachedData.GetValue(argumentsOwner, () => GetModulesNotCached(argumentsOwner));
         }
 
-        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>
-            GetControllersNonCached([NotNull] IArgumentsOwner argumentsOwner)
+        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>GetModulesNotCached([NotNull] IArgumentsOwner argumentsOwner)
         {
             argumentsOwner.AssertIsValid("argumentsOwner is invalid");
             IPsiModule psiModule = argumentsOwner.GetPsiModule();
@@ -413,109 +397,58 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             Assertion.AssertNotNull(project, "project == null");
             IProjectFile projectFile = argumentsOwner.GetSourceFile().ToProjectFile();
             Assertion.AssertNotNull(projectFile, "projectFile == null");
-            var mvcCache = project.GetSolution().GetComponent<MvcCache>();
 
-            FileSystemPath implicitArea = GetAreaFolder(projectFile);
-            IEnumerable<string> areaNames = ProcessArgumentsExpression(argumentsOwner, MvcKind.Area)
-                .DefaultIfEmpty(AreasFolder.Equals(implicitArea.Name, StringComparison.OrdinalIgnoreCase)
-                                    ? null
-                                    : implicitArea.Name);
             IList<string> controllerNames = ProcessArgumentsExpression(argumentsOwner, MvcKind.Controller);
 
-            ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, bool>> names;
+            ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, bool>> moduleNames = new List<JetTuple<string, string, MvcUtil.DeterminationKind, bool>>();
+
+            if (!controllerNames.IsEmpty())
+            {
+                Debugger.Break();
+            }
 
             if (controllerNames.IsEmpty())
             {
                 // first, try detect implicit controller type by view
-                if (projectFile.LanguageType.Is<HtmlProjectFileType>())
+
+                var typeDeclaration = argumentsOwner.GetContainingNode<ITypeDeclaration>();
+                IClass declaredElement = (typeDeclaration != null)
+                                             ? typeDeclaration.DeclaredElement as IClass
+                                             : null;
+
+                if (declaredElement == null)
                 {
-                    names =
-                        (
-                            from area in areaNames
-                            from kind in new[] { MvcKind.View, MvcKind.PartialView }
-                            from locationFormat in mvcCache.GetLocations(project, GetViewLocationType(kind, area))
-                            let viewsPath =
-                                new FileSystemPath(string.Format(locationFormat, null, ModuleClassSuffix /* just fake */,
-                                                                 area)).Directory.Directory
-                            where
-                                viewsPath.IsPrefixOf(projectFile.ParentFolder.IfNotNull(p => p.Location) ??
-                                                     FileSystemPath.Empty)
-                            select
-                                JetTuple.Of(area,
-                                            projectFile.Location.ConvertToRelativePath(viewsPath)
-                                                       .GetPathComponents()
-                                                       .First(), MvcUtil.DeterminationKind.ImplicitByLocation, false)
-                        )
-                            .Distinct(tuple => tuple.B)
-                            .ToList();
-                }
-                else
-                {
-                    names = EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, bool>>.InstanceList;
+                    return EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>.InstanceList;
                 }
 
-                // second, try determine implicit controller type by containing member
-                if (names.IsEmpty())
+                var @default = JetTuple.Of(GetControllerArea(declaredElement),
+                                           GetControllerName(declaredElement),
+                                           MvcUtil.DeterminationKind.ImplicitByContainingMember,
+                                           (ICollection<IClass>)new IClass[] { null });
+
+                // with inheritors
+                if (declaredElement.IsAbstract)
                 {
-                    var typeDeclaration = argumentsOwner.GetContainingNode<ITypeDeclaration>();
-                    IClass declaredElement = (typeDeclaration != null)
-                                                 ? typeDeclaration.DeclaredElement as IClass
-                                                 : null;
-
-                    if (declaredElement == null)
-                    {
-                        return
-                            EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>
-                                .InstanceList;
-                    }
-
-                    JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>> @default =
-                        JetTuple.Of(GetControllerArea(declaredElement), GetControllerName(declaredElement),
-                                    MvcUtil.DeterminationKind.ImplicitByContainingMember,
-                                    (ICollection<IClass>)new IClass[] { null });
-
                     // with inheritors
-                    if (declaredElement.IsAbstract)
-                    {
-                        // with inheritors
-                        return GetAvailableModules(psiModule, baseClass: declaredElement)
-                            .SelectMany(_ => _.Value)
-                            .GroupBy(
-                                @class =>
-                                new { area = GetControllerArea(@class), controller = GetControllerName(@class) })
-                            .Select(
-                                _ =>
-                                JetTuple.Of(_.Key.area, _.Key.controller,
-                                            MvcUtil.DeterminationKind.ImplicitByContainingMember,
-                                            (ICollection<IClass>)_.ToList()))
-                            .DefaultIfEmpty(@default)
-                            .ToList();
-                    }
-
-                    names = new[]
-                    { JetTuple.Of(@default.A, @default.B, MvcUtil.DeterminationKind.ImplicitByContainingMember, true) };
-                }
-            }
-            else
-            {
-                names =
-                    (
-                        from area in areaNames
-                        from controller in controllerNames
-                        select JetTuple.Of(area, controller, MvcUtil.DeterminationKind.Explicit, false)
-                    )
+                    return GetAvailableModules(psiModule, baseClass: declaredElement)
+                        .SelectMany(_ => _.Value)
+                        .GroupBy(@class => new { area = GetControllerArea(@class), controller = GetControllerName(@class) })
+                        .Select(_ => JetTuple.Of(_.Key.area, _.Key.controller,
+                                        MvcUtil.DeterminationKind.ImplicitByContainingMember,
+                                        (ICollection<IClass>)_.ToList()))
+                        .DefaultIfEmpty(@default)
                         .ToList();
+                }
+
+                moduleNames = new[] { JetTuple.Of(@default.A, @default.B, MvcUtil.DeterminationKind.ImplicitByContainingMember, true) };
             }
 
-            return
-                (
-                    from tuple in names
-                    let availableControllers = GetAvailableModules(psiModule, new[] { tuple.A }, tuple.D)
+            return (from tuple in moduleNames
+                    let availableModules = GetAvailableModules(psiModule, new[] { tuple.A }, tuple.D)
                     select JetTuple.Of(tuple.A, tuple.B, tuple.C, tuple.B == null
                                                                       ? (ICollection<IClass>)new IClass[] { null }
-                                                                      : availableControllers.GetValuesCollection(tuple.B))
-                )
-                    .ToList();
+                                                                      : availableModules.GetValuesCollection(tuple.B)))
+                .ToList();
         }
 
         /// <returns>First is return type, rest - arguments types</returns>
@@ -539,8 +472,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
             else
             {
-                yield return
-                    new AnonymousTypeDescriptor(null, MvcElementsCache.GetInstance(psiModule).MvcActionResultClassType,
+                yield return new AnonymousTypeDescriptor(null, MvcElementsCache.GetInstance(psiModule).MvcActionResultClassType,
                                                 false);
                 foreach (var pair in RetrieveArgumentExpressions(argumentsOwner, MvcKind.ModelType, true))
                 {
@@ -703,9 +635,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         {
             if (argumentsOwner == null)
             {
-                return
-                    EmptyList<Pair<IExpression, ICollection<JetTuple<MvcKind, string, IAttributeInstance>>>>
-                        .InstanceList;
+                return EmptyList<Pair<IExpression, ICollection<JetTuple<MvcKind, string, IAttributeInstance>>>>.InstanceList;
             }
 
             return
@@ -725,31 +655,28 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         private static IList<string> ProcessArgumentsExpression(IArgumentsOwner argumentsOwner, MvcKind kind)
         {
-            IDeclaredType stringType = TypeFactory.CreateTypeByCLRName(PredefinedType.STRING_FQN,
-                                                                       argumentsOwner.GetPsiModule());
+            IDeclaredType stringType = TypeFactory.CreateTypeByCLRName(PredefinedType.STRING_FQN, argumentsOwner.GetPsiModule());
 
-            return new List<string>(
-                from expression in RetrieveArgumentExpressions(argumentsOwner, kind)
-                let finder = new RecursiveElementCollector<IExpression>(
-                    literalExpression =>
-                    {
-                        if (
-                            !literalExpression.GetExpressionType()
-                                              .IsImplicitlyConvertibleTo(stringType,
-                                                                         IntentionLanguageSpecific.GetTypeConversion(
-                                                                             literalExpression)))
-                        {
-                            return false;
-                        }
-                        string initializerName;
-                        IInvocationInfo invocationInfo;
-                        GetMvcLiteral(literalExpression, out invocationInfo, out initializerName);
-                        return (invocationInfo == argumentsOwner) &&
-                               expression.Second.Any(_ => StringComparer.OrdinalIgnoreCase.Equals(_.B, initializerName));
-                    })
-                from literal in finder.ProcessElement(expression.First).GetResults()
-                select literal.ConstantValue.Value as string
-                );
+            var enumerabe1 = from expression in RetrieveArgumentExpressions(argumentsOwner, kind)
+                            let finder = new RecursiveElementCollector<IExpression>(
+                                literalExpression =>
+                                {
+                                    if (!literalExpression.GetExpressionType().IsImplicitlyConvertibleTo(
+                                        stringType, IntentionLanguageSpecific.GetTypeConversion(literalExpression)))
+                                    {
+                                        return false;
+                                    }
+
+                                    string initializerName;
+                                    IInvocationInfo invocationInfo;
+                                    GetMvcLiteral(literalExpression, out invocationInfo, out initializerName);
+                                    return (invocationInfo == argumentsOwner) &&
+                                           expression.Second.Any(_ => StringComparer.OrdinalIgnoreCase.Equals(_.B, initializerName));
+                                })
+                            select new { finder, expression };
+            return (from x in enumerabe1
+                    from literal in x.finder.ProcessElement(x.expression.First).GetResults()
+                    select literal.ConstantValue.Value as string).ToList();
         }
 
         public static IResolveInfo CheckMvcResolveResult([NotNull] IResolveInfo result, MvcKind mvcKind)
