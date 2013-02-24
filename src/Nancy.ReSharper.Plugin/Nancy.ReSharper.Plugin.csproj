@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
+    <Compile Include="CustomReferences\NancyRazorViewResolver.cs" />
     <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
     <Compile Include="CustomReferences\NancyViewResolver.cs" />
+    <Compile Include="CustomReferences\NancyViewResolverBase.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
