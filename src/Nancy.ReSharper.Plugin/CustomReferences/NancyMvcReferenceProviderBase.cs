@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -83,9 +84,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
         }
 
-        protected virtual MvcViewReferenceBase<TLiteral, TMethod> GetMvcViewReference(IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
+        protected virtual MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration> GetMvcViewReference(IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
         {
-            return null;
+            return new MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>(literal, names, mvcKind, version);
         }
 
         protected virtual MvcAreaReference<TLiteral> GetMvcAreaReference(IExpression literal)

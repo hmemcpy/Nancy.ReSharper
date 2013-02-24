@@ -48,7 +48,13 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             ResolveFilter = delegate(IDeclaredElement element)
             {
                 var pathDeclaredElement = element as IPathDeclaredElement;
-                return pathDeclaredElement != null && pathDeclaredElement.GetProjectItem() != null;
+                if (pathDeclaredElement == null)
+                {
+                    return false;
+                }
+
+                IProjectItem projectItem = pathDeclaredElement.GetProjectItem();
+                return projectItem != null;
             };
             myPsiServices = myOwner.GetPsiServices();
             myCache = myPsiServices.Solution.GetComponent<MvcCache>();
@@ -83,9 +89,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                         symbolTable2 = (
                                            from @class in tuple.D
                                            where @class != null && @class.IsValid()
-                                           select
-                                               GetReferenceSymbolTable(@class, useReferenceName ? name : null, myMvcKind,
-                                                                       myVersion, tuple.A)).Merge(null);
+                                           select GetReferenceSymbolTable(@class, useReferenceName ? name : null, myMvcKind, myVersion, tuple.A)).Merge();
                     }
                     else
                     {
