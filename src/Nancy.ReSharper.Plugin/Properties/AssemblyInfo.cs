@@ -11,5 +11,5 @@ using JetBrains.Application.PluginSupport;
 [assembly: PluginDescription("Adds support for NancyFX in ReSharper")]
 [assembly: PluginVendor("Igal Tabachnik")]
 
-[assembly: AssemblyVersion("0.0.0")]
-[assembly: AssemblyFileVersion("0.0.0")]
+[assembly: AssemblyVersion("0.1.0")]
+[assembly: AssemblyFileVersion("0.1.0")]
