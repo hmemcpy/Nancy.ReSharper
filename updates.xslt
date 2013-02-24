@@ -23,15 +23,15 @@
         <UpdateInfo>
           <InformationUri>https://github.com/hmemcpy/Nancy-ReSharper-Plugin</InformationUri>
           <Title>
-            <xsl:value-of select="concat('Nancy plugin for ReSharper ', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, ' Released')" />
+            <xsl:value-of select="concat('Nancy plugin for ReSharper v', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, ' Released')" />
           </Title>
           <Description>A minor upgrade is available.</Description>
           <DownloadUri>
-            <xsl:value-of select="concat('http://download.jetbrains.com/resharper/plugins/resharper-nuget.', $LatestMajor, '.', $LatestMinor, '.zip')" />
+            <xsl:value-of select="concat('https://github.com/hmemcpy/Nancy-ReSharper-Plugin/blob/versions/NancyReSharperPlugin.', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.msi')" />
           </DownloadUri>
           <CompanyName>Igal Tabachnik</CompanyName>
           <ProductName>Nancy plugin for ReSharper</ProductName>
-          <ProductVersion><xsl:value-of select="concat($LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.0')"/></ProductVersion>
+          <ProductVersion><xsl:value-of select="concat($LatestMajor, '.', $LatestMinor, '.', $LatestBuild)"/></ProductVersion>
           <PriceTag />
           <IsFree>true</IsFree>
           <!--<IconData>
