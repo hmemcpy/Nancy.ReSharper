@@ -29,6 +29,7 @@
           <DownloadUri>
             <xsl:value-of select="concat('https://raw.github.com/hmemcpy/Nancy-ReSharper-Plugin/versions/NancyReSharperPlugin.', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.msi')" />
           </DownloadUri>
+          <CompanyName>Igal Tabachnik's</CompanyName>
           <ProductName>Nancy plugin for ReSharper</ProductName>
           <ProductVersion><xsl:value-of select="concat($LatestMajor, '.', $LatestMinor, '.', $LatestBuild)"/></ProductVersion>
           <PriceTag />
