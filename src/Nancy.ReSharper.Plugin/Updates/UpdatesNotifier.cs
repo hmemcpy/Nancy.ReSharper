@@ -14,7 +14,7 @@ namespace Nancy.ReSharper.Plugin.Updates
         {
             var uri = new Uri("https://raw.github.com/hmemcpy/Nancy-ReSharper-Plugin/master/updates.xslt");
 
-            var category = updatesManager.Categories.AddOrActivate("NuGetSupport", uri);
+            var category = updatesManager.Categories.AddOrActivate("NancyFxSupport", uri);
             category.CustomizeLocalEnvironmentInfo.Advise(lifetime, args =>
             {
                 // We can customize the local environment info that the xslt will be applied to
