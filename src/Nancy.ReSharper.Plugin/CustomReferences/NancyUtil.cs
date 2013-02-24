@@ -397,10 +397,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             {
                 return EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>.InstanceList;
             }
-            return argumentsOwner.UserData
-                                 .GetOrCreateData(ourCachedControllersKey,
-                                                  () =>
-                                                  argumentsOwner.CreateCachedValue(
+            return argumentsOwner.UserData.GetOrCreateData(ourCachedControllersKey,
+                                                  () => argumentsOwner.CreateCachedValue(
                                                       GetControllersNonCached(argumentsOwner)))
                                  .GetValue(argumentsOwner, () => GetControllersNonCached(argumentsOwner));
         }
