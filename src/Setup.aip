@@ -9,10 +9,10 @@
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://github.com/hmemcpy/Nancy-ReSharper-Plugin"/>
     <ROW Property="Manufacturer" Value="Igal Tabachnik"/>
-    <ROW Property="ProductCode" Value="1033:{C653E0E3-9154-4050-81A4-FE67331DF806} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{423E1182-CA58-430A-900F-7932AB75EB44} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
-    <ROW Property="ProductName" Value="Nancy plugin for ReSharper v0.1.0"/>
-    <ROW Property="ProductVersion" Value="0.1.0" Type="32"/>
+    <ROW Property="ProductName" Value="Nancy plugin for ReSharper v[|ProductVersion]"/>
+    <ROW Property="ProductVersion" Value="0.1.1" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{8BFAA420-0FCE-4D22-B462-A0FBB28D0FCD}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>

@@ -1,7 +1,6 @@
 ﻿using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Feature.Services.Asp.CSharp.CustomReferences;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -39,15 +38,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             if (!NancyCustomReferencesSettings.IsProjectReferencingNancy(projectFile, out version))
                 return null;
 
-            return CreateCSharpMvcReferenceProvider(solution.GetComponent<MvcIndexer>(), version);
-        }
-
-        private IReferenceFactory CreateCSharpMvcReferenceProvider(MvcIndexer indexer, Version version)
-        {
-            Type type = typeof(CSharpMvcReferenceProviderFactory).Assembly.GetType(
-                "JetBrains.ReSharper.Feature.Services.Asp.CSharp.CustomReferences.CSharpMvcReferenceProvider");
-
-            return (IReferenceFactory)Activator.CreateInstance(type, new object[] { indexer, version });
+            return new NancyMvcReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
         }
 
         private void FireOnChanged()
