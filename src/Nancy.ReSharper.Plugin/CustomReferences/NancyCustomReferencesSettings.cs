@@ -1,6 +1,5 @@
 ﻿using System;
 using JetBrains.Annotations;
-using JetBrains.DataFlow;
 using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi.Web.Util;
@@ -11,16 +10,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
     {
         private static readonly AssemblyNameInfo NancyAssemblyName = new AssemblyNameInfo("Nancy");
         private static readonly AssemblyNameInfo NancyRazorAssemblyName = new AssemblyNameInfo("Nancy.ViewEngines.Razor");
-
-        [ContractAnnotation("=>true,version:notnull;=>false,version:null")]
-        public static bool IsApplied([NotNull] IProperty<bool> enabled, [CanBeNull] IProjectItem projectItem, [CanBeNull] out Version version)
-        {
-            version = null;
-            if (!enabled.Value)
-                return false;
-            
-            return IsProjectReferencingNancy(projectItem, out version);
-        }
 
         [ContractAnnotation("=>true,version:notnull;=>false,version:null")]
         public static bool IsProjectReferencingNancy([CanBeNull] IProjectElement projectElement, [CanBeNull] out Version version)

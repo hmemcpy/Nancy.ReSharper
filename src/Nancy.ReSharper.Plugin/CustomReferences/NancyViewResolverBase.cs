@@ -9,10 +9,12 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
     public abstract class NancyViewResolverBase : IMvcViewResolver
     {
         private readonly string[] allExtensions;
-        private readonly IDictionary<MvcViewLocationType, ICollection<string>> DefaultViewLocations;
+        private readonly IDictionary<MvcViewLocationType, ICollection<string>> defaultViewLocations;
 
         private Dictionary<MvcViewLocationType, ICollection<string>> InitializeDefaultViews()
         {
+            // {0} is view
+            // {1} is module
             return new Dictionary<MvcViewLocationType, ICollection<string>>
             {
                 { MvcViewLocationType.Unknown, EmptyList<string>.InstanceList },
@@ -27,9 +29,10 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         protected NancyViewResolverBase(params string[] allExtensions)
         {
-            this.allExtensions = allExtensions;
+            // Nancy supports exact filename, so adding empty extension placeholder to be replaced with the passed in view filename
+            this.allExtensions = new[] { "" }.Union(allExtensions).ToArray();
 
-            DefaultViewLocations = InitializeDefaultViews();
+            defaultViewLocations = InitializeDefaultViews();
         }
 
         private string[] GetAllPaths(params string[] viewLocations)
@@ -39,6 +42,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         public abstract bool IsApplicable(IProject project);
 
-        public IDictionary<MvcViewLocationType, ICollection<string>> Values { get; private set; }
+        public IDictionary<MvcViewLocationType, ICollection<string>> Values
+        {
+            get { return defaultViewLocations; }
+        }
     }
 }

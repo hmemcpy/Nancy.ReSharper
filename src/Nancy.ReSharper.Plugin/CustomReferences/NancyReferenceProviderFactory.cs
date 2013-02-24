@@ -1,7 +1,6 @@
 ﻿using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Asp.CSharp.CustomReferences;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
@@ -16,16 +15,13 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
     public class NancyReferenceProviderFactory : IReferenceProviderFactory
     {
         private readonly ISolution solution;
-        private readonly IProperty<bool> isMvcEnabled;
 
         public event Action OnChanged = delegate { };
 
         public NancyReferenceProviderFactory(Lifetime lifetime, ISolution solution, ISettingsStore settingsStore, MvcReferenceProviderValidator providerValidator)
         {
             this.solution = solution;
-            isMvcEnabled = settingsStore.BindToContextLive(lifetime, ContextRange.Smart(solution.ToDataContext()))
-                .GetValueProperty(lifetime, (MvcCustomReferencesSettings settings) => settings.Enabled);
-
+            
             lifetime.AddBracket(() => providerValidator.OnChanged += FireOnChanged,
                                 () => providerValidator.OnChanged -= FireOnChanged);
         }
@@ -40,9 +36,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 return null;
 
             Version version;
-            if (!NancyCustomReferencesSettings.IsApplied(isMvcEnabled, projectFile, out version))
+            if (!NancyCustomReferencesSettings.IsProjectReferencingNancy(projectFile, out version))
                 return null;
-
 
             return CreateCSharpMvcReferenceProvider(solution.GetComponent<MvcIndexer>(), version);
         }

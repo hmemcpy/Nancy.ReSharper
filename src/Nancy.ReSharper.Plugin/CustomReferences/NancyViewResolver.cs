@@ -11,7 +11,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         public NancyViewResolver()
             : base(".htm", ".html", ".sshtml")
         {
-            
         }
 
         public override bool IsApplicable(IProject project)
