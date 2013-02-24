@@ -31,8 +31,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         protected NancyViewResolverBase(params string[] allExtensions)
         {
-            // Nancy supports exact filename, so adding empty extension placeholder to be replaced with the passed in view filename
-            this.allExtensions = new[] { "" }.Union(allExtensions).ToArray();
+            this.allExtensions = allExtensions;
 
             defaultViewLocations = InitializeDefaultViews();
         }

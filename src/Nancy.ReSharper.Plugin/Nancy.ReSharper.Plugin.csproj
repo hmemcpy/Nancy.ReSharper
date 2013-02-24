@@ -41,6 +41,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomReferences\MvcViewReferenceBase.cs" />
     <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
     <Compile Include="CustomReferences\NancyUtil.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.cs" />

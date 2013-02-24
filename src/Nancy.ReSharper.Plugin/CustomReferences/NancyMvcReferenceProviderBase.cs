@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -39,9 +40,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             var expression1 = element as TExpression;
             if (expression1 != null && HasImplicitReference(expression1, myIndexer.GetAllShortNames()))
                 return GetImplicitReferences(expression1).ToArray();
-            TExpression expression2;
+            TExpression argumentExpression;
             string anonymousPropertyName;
-            IExpression mvcLiteral = GetMvcLiteral(element, out expression2, out anonymousPropertyName);
+            IExpression mvcLiteral = GetMvcLiteral(element, out argumentExpression, out anonymousPropertyName);
             if (mvcLiteral == null)
                 return EmptyArray<IReference>.Instance;
             IParameter parameter = mvcLiteral.GetContainingNode<IArgument>().IfNotNull(d => d.MatchingParameter).IfNotNull(p => p.Element);
@@ -60,19 +61,19 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 case MvcKind.Controller:
                     return new IReference[]
                     {
-                        GetMvcControllerReference(mvcLiteral, expression2)
+                        GetMvcControllerReference(mvcLiteral, argumentExpression)
                     };
                 case MvcKind.Action:
                     return new IReference[]
                     {
-                        GetMvcActionReference(mvcLiteral, expression2)
+                        GetMvcActionReference(mvcLiteral, argumentExpression)
                     };
                 case MvcKind.View:
                 case MvcKind.PartialView:
                 case MvcKind.Master:
                 case MvcKind.DisplayTemplate:
                 case MvcKind.EditorTemplate:
-                    List<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> list = NancyUtil.GetModules(expression2)
+                    var list = NancyUtil.GetModules(argumentExpression)
                         .DefaultIfEmpty(JetTuple.Of((string)null, (string)null, MvcUtil.DeterminationKind.Explicit, (ICollection<IClass>)null)).ToList();
                     return new IReference[]
                     {
@@ -83,9 +84,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
         }
 
-        protected virtual MvcViewReference<TLiteral, TMethod> GetMvcViewReference(IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
+        protected virtual MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration> GetMvcViewReference(IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)
         {
-            return new MvcViewReference<TLiteral, TMethod>(literal, names, mvcKind, version);
+            return new MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>(literal, names, mvcKind, version);
         }
 
         protected virtual MvcAreaReference<TLiteral> GetMvcAreaReference(IExpression literal)
