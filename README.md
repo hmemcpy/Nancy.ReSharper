@@ -1,6 +1,6 @@
 # **ReSharper <3 Nancy!**
 
-**Nancy plugin for ReSharper** adds navigation and intellisense support for NancyFX in ReSharper, for super-duper-happy-path web development!
+**Nancy plugin for ReSharper** adds navigation and intellisense support for [Nancy](http://nancyfx.org/) in [ReSharper](http://www.jetbrains.com/resharper/), for super-duper-happy-path web development!
 
 ## What does it do?
 
