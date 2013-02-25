@@ -28,6 +28,8 @@ Why don't you [**download the plugin**](https://raw.github.com/hmemcpy/Nancy-ReS
 
 **Latest version: v0.1.1**
 
+*Note*: You need ReSharper 7.1.x or later to install this plugin!
+
 For the list of currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
 
 ## Bugs? Questions? Suggestions?
