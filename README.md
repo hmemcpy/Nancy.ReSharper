@@ -24,7 +24,7 @@ The plugin adds support for the different view engines supported by Nancy! This 
 
 ## What's in the box?
 
-Why don't you [**download the plugin**](https://raw.github.com/hmemcpy/Nancy-ReSharper-Plugin/versions/NancyReSharperPlugin.0.1.1.msi) and find out?
+Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.0.1.1.msi?direct) and find out?
 
 **Latest version: v0.1.1**
 
