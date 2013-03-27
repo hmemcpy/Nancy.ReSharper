@@ -57,6 +57,9 @@
     <Compile Include="CustomReferences\NancyViewResolverBase.cs" />
     <Compile Include="CustomReferences\RazorCSharpNancyProjectFileLanguageService.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
+    <Compile Include="LiveTemplates\NancyRazorCSharpFileTemplatesSupport.cs" />
+    <Compile Include="LiveTemplates\NancyRazorFileTemplatesSupportBase.cs" />
+    <Compile Include="LiveTemplates\NancyRazorFileTemplatesSupport.cs" />
     <Compile Include="LiveTemplates\NancyRazorProjectScopeProvider.cs" />
     <Compile Include="LiveTemplates\NancyRazorCSharpProjectScopeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

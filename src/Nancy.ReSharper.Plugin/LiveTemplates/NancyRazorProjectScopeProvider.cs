@@ -5,7 +5,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.LiveTemplates.Context;
 using JetBrains.ReSharper.Feature.Services.LiveTemplates.Scope;
 using JetBrains.ReSharper.Feature.Services.Razor.LiveTemplates.Scope;
-using JetBrains.ReSharper.Psi.Web.Util;
 using JetBrains.Util;
 using Nancy.ReSharper.Plugin.CustomReferences;
 

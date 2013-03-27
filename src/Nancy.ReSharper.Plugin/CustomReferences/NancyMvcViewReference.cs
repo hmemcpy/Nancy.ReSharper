@@ -1,10 +1,15 @@
 ﻿﻿using System;
 using System.Collections.Generic;
+﻿using System.Diagnostics;
+﻿using System.Linq;
 ﻿using JetBrains.Annotations;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.SmartCompletion;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+﻿using JetBrains.ReSharper.Psi.CodeAnnotations;
+﻿using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
+﻿using JetBrains.ReSharper.Psi.Resolve;
 ﻿using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
 
