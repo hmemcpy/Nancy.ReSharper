@@ -29,7 +29,7 @@ namespace Nancy.ReSharper.Plugin.QuickFixes
         public void CreateBulbItems(BulbMenu menu, Severity severity)
         {
             // BUG HACK!
-            // This is the worst and nastiest hack I've ever had to, for the lack of a better word, implement.
+            // This is the worst and nastiest hack I've ever had to do.
             // At the moment, the ASPX quickfixes will be always enabled in any web project.
 
             // The reason is that in the base class, MvcQuickFixTemplateProviderBase, the 'IsAvailable' method is not virtual,
