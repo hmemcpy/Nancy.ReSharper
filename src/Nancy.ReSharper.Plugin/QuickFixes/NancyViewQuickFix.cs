@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
+using JetBrains.PsiFeatures.VisualStudio.Core.Intentions.QuickFixes.MVC;
 using JetBrains.ReSharper.Daemon;
 using JetBrains.ReSharper.Daemon.Asp.Highlightings;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
@@ -41,12 +42,17 @@ namespace Nancy.ReSharper.Plugin.QuickFixes
 
             dynamic exposedMenu = ExposedObject.Exposed.From(menu);
             Dictionary<Anchor, BulbGroup> groups = exposedMenu.myGroups;
-            BulbGroup quickfixes = groups[AnchorsForBulbMenuGroups.QuickFixesAnchor];
-            dynamic exposedQuickFixes = ExposedObject.Exposed.From(quickfixes);
-            List<BulbMenuItem> bulbMenuItems = exposedQuickFixes.myMenuItems;
-            bulbMenuItems.RemoveAll(item => item.BulbAction.Text.Contains("ASPX")); // *shudders!*
-            
-            GC.KeepAlive(groups);
+            if (groups != null)
+            {
+                BulbGroup quickfixes = groups[AnchorsForBulbMenuGroups.QuickFixesAnchor];
+                dynamic exposedQuickFixes = ExposedObject.Exposed.From(quickfixes);
+                List<BulbMenuItem> bulbMenuItems = exposedQuickFixes.myMenuItems;
+                if (bulbMenuItems != null)
+                {
+                    bulbMenuItems.RemoveAll(item => item.BulbAction.Text.Contains("ASPX")); // *shudders!* - removes all ASPX menu items
+                    bulbMenuItems.RemoveAll(item => item.BulbAction is MvcViewVSCommandBulbItem); // *shudders x2!* - removes "create view by VS"
+                }
+            }
         }
 
         public bool IsAvailable(IUserDataHolder cache)
