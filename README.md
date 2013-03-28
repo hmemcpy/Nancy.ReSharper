@@ -28,7 +28,7 @@ Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Na
 
 **Latest version: v0.1.1**
 
-*Note*: You need ReSharper 7.1.x or later to install this plugin!
+*Note*: You need ReSharper **7.1.2** or later to install this plugin!
 
 For the list of currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
 
