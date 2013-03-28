@@ -27,7 +27,7 @@
           </Title>
           <Description>A minor upgrade is available.</Description>
           <DownloadUri>
-            <xsl:value-of select="concat('https://raw.github.com/hmemcpy/Nancy-ReSharper-Plugin/versions/NancyReSharperPlugin.', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.msi')" />
+            <xsl:value-of select="concat('http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.', $LatestMajor, '.', $LatestMinor, '.', $LatestBuild, '.msi?direct')" />
           </DownloadUri>
           <CompanyName>Igal Tabachnik's</CompanyName>
           <ProductName>Nancy plugin for ReSharper</ProductName>
