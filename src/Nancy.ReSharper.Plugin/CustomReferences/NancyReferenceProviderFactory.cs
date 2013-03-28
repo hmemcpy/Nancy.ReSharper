@@ -7,7 +7,6 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using System;
-using JetBrains.ReSharper.Psi.Web.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
@@ -40,10 +39,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             {
                 return null;
             }
-            //if (!ReferencedAssembliesServiceEx.IsProjectReferencingMvc(projectFile, out version))
-            //{
-            //    return null;
-            //}
 
             return new NancyMvcReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
         }

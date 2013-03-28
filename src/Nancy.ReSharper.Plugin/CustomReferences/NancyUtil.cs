@@ -402,11 +402,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
             ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, bool>> moduleNames = new List<JetTuple<string, string, MvcUtil.DeterminationKind, bool>>();
 
-            if (!controllerNames.IsEmpty())
-            {
-                Debugger.Break();
-            }
-
             if (controllerNames.IsEmpty())
             {
                 // first, try detect implicit controller type by view

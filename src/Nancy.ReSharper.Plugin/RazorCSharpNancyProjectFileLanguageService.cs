@@ -18,8 +18,9 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Razor.CSharp.Mvc;
 using JetBrains.ReSharper.Psi.Razor.Mvc.Impl;
+using Nancy.ReSharper.Plugin.CustomReferences;
 
-namespace Nancy.ReSharper.Plugin.CustomReferences
+namespace Nancy.ReSharper.Plugin
 {
     [ProjectFileType(typeof(RazorCSharpProjectFileType))]
     public class RazorCSharpNancyProjectFileLanguageService : RazorCSharpMvcProjectFileLanguageService

@@ -37,10 +37,6 @@ namespace Nancy.ReSharper.Plugin.Daemon
             {
                 return Enumerable.Empty<IDaemonStageProcess>();
             }
-            //if (!ReferencedAssembliesServiceEx.IsProjectReferencingMvc(projectFile, out version))
-            //{
-            //    return Enumerable.Empty<IDaemonStageProcess>();
-            //}
 
             return new[]
             {
