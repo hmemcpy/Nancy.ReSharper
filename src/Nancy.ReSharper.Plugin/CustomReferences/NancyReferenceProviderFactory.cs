@@ -36,7 +36,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
             Version version;
             if (!NancyCustomReferencesSettings.IsProjectReferencingNancy(projectFile, out version))
+            {
                 return null;
+            }
 
             return new NancyMvcReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
         }
