@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="9.9" version="9.9" Modules="professional" RootPath="." Language="en" Id="{B91DB8FC-F5F1-4947-9FDE-9156832D2280}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="9.9" version="10.0" Modules="professional" RootPath="." Language="en" Id="{B91DB8FC-F5F1-4947-9FDE-9156832D2280}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiValidationComponent">
-    <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="32767" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="2" ColumnIndex="7" ColumnSize="2" MsiKey="File#Sequence"/>
-    <ROW Table="Media" Column="LastSequence" MinValue="0" MaxValue="32767" Description="File sequence number for the last file for this media." Options="0" ColumnType="2" ColumnIndex="1" ColumnSize="2" MsiKey="Media#LastSequence"/>
+    <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="2147483647" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="3" ColumnIndex="7" ColumnSize="4" MsiKey="File#Sequence"/>
+    <ROW Table="Media" Column="LastSequence" MinValue="0" MaxValue="2147483647" Description="File sequence number for the last file for this media." Options="0" ColumnType="3" ColumnIndex="1" ColumnSize="4" MsiKey="Media#LastSequence"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_ThemeStyle" Value="default" MsiKey="AI_ThemeStyle"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://github.com/hmemcpy/Nancy-ReSharper-Plugin"/>
     <ROW Property="Manufacturer" Value="Igal Tabachnik"/>
-    <ROW Property="ProductCode" Value="1033:{423E1182-CA58-430A-900F-7932AB75EB44} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{0B8C3F05-B428-48CE-A44C-606C7462E339} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Nancy plugin for ReSharper v[|ProductVersion]"/>
-    <ROW Property="ProductVersion" Value="0.1.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="0.1.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{8BFAA420-0FCE-4D22-B462-A0FBB28D0FCD}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -35,10 +35,9 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="Nancy.ExternalAnnotations.xml" ComponentId="{161DE703-9ED5-401A-89BB-4BBC62B88BE1}" Directory_="Nancy_Dir" Attributes="0" KeyPath="Nancy.ExternalAnnotations.xml" Type="0"/>
     <ROW Component="Nancy.ReSharper.Plugin.dll" ComponentId="{451EA41D-FA10-4B03-A494-BB4B3E826AE8}" Directory_="NancyFX_Dir" Attributes="0" KeyPath="Nancy.ReSharper.Plugin.dll"/>
-    <ROW Component="ProductInformation" ComponentId="{74D7454B-180A-4F73-B4DF-32DE10608FEA}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Nancy.ExternalAnnotations.xml Nancy.ReSharper.Plugin.dll ProductInformation"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Nancy.ExternalAnnotations.xml Nancy.ReSharper.Plugin.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -132,15 +131,11 @@
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
-    <ROW Condition="RESHARPER_DIRECTORY" Description="ReSharper is installed on the machine"/>
+    <ROW Condition="RESHARPER_DIRECTORY" Description="Unable to find ReSharper 7.1 installation directory. Make sure ReSharper 7.1.2 (or higher) is installed."/>
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]" DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
-    <ROW Signature_="AppSearchSign" Root="2" Key="SOFTWARE\JetBrains\ReSharper\v7.1" Name="InstallDir" Type="0"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
-    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
-    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+    <ROW Signature_="AppSearchSign" Root="2" Key="SOFTWARE\JetBrains\ReSharper\v7.1" Name="InstallDir" Type="2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
