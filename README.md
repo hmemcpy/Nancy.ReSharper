@@ -14,7 +14,8 @@ The plugin adds support for the different view engines supported by Nancy! This 
 
 - Navigation to and from the view page to the Nancy module (using Go to Declaration or Ctrl-Click)  
 
-- Creating views directly from usage
+- Creating views directly from usage (Alt-Enter)  
+![](http://i.imgur.com/Nos475K.png)
 
 - Supports [`SuperSimpleViewEngine`](https://github.com/NancyFx/Nancy/wiki/The-Super-Simple-View-Engine) and `Razor` views
 
@@ -24,13 +25,13 @@ The plugin adds support for the different view engines supported by Nancy! This 
 
 ## What's in the box?
 
-Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.0.1.1.msi?direct) and find out?
+Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.0.1.2.msi?direct) and find out?
 
-**Latest version: v0.1.1**
+**Latest version: v0.1.2**
 
 *Note*: You need ReSharper **7.1.2** or later to install this plugin!
 
-For the list of currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
+For the list of changes and currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
 
 ## Bugs? Questions? Suggestions?
 
