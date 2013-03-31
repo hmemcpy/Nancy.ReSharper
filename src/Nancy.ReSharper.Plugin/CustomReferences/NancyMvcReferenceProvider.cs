@@ -14,7 +14,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     public class NancyMvcReferenceProvider : NancyMvcReferenceProviderBase<ICSharpLiteralExpression, ICSharpArgumentsOwner, IMethodDeclaration>
     {
-        public NancyMvcReferenceProvider([NotNull] NancyIndexer indexer, [NotNull] Version version)
+        public NancyMvcReferenceProvider([NotNull] MvcIndexer indexer, [NotNull] Version version)
             : base(indexer, version)
         {
         }

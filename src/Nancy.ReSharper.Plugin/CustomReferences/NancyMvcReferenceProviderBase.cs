@@ -18,10 +18,10 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         where TExpression : class, IArgumentsOwner, IInvocationInfo, ITreeNode
         where TMethod : class, ITypeOwnerDeclaration, ITypeMemberDeclaration
     {
-        private readonly NancyIndexer myIndexer;
+        private readonly MvcIndexer myIndexer;
         private readonly Version myVersion;
 
-        protected NancyMvcReferenceProviderBase([NotNull] NancyIndexer indexer, [NotNull] Version version)
+        protected NancyMvcReferenceProviderBase([NotNull] MvcIndexer indexer, [NotNull] Version version)
         {
             myIndexer = indexer;
             myVersion = version;

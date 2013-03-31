@@ -40,7 +40,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 return null;
             }
 
-            return new NancyMvcReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
+            return new NancyMvcReferenceProvider(solution.GetComponent<MvcIndexer>(), version);
         }
 
         private void FireOnChanged()
