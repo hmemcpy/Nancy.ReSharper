@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
+    <Compile Include="CustomReferences\NancyUtil.8.x.cs" />
     <Compile Include="CustomReferences\NancyUtil.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.cs" />
     <Compile Include="CustomReferences\NancyMvcControllerReference.cs" />

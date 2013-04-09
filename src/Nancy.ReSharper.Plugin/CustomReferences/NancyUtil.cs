@@ -12,6 +12,7 @@ using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
+using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Resolve.Managed;
 using JetBrains.ReSharper.Psi.Search;
@@ -26,7 +27,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     // note: don't enter! here be dragons!
 
-    public static class NancyUtil
+    public static partial class NancyUtil
     {
         private const string ModuleClassSuffix = "Module";
         public const string AreasFolder = "Areas";
