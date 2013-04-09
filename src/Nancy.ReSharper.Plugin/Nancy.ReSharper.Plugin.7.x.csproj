@@ -54,7 +54,6 @@
     <Compile Include="CustomReferences\NancyMvcAreaReference.cs" />
     <Compile Include="CustomReferences\NancyMvcActionReference.cs" />
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
-    <Compile Include="CustomReferences\NancyIndexer.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProvider.cs" />
     <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
     <Compile Include="CustomReferences\ViewResolvers\NancyMarkdownViewResolver.cs" />
