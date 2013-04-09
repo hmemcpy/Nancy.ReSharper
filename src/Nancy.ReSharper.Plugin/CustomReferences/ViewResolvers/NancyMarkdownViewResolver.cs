@@ -16,7 +16,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
 
         public override bool IsApplicable(IProject project)
         {
-            return NancyCustomReferencesSettings.IsProjectReferencingAssembly(project, NancyMarkdownAssemblyName);
+            return project.IsProjectReferencingAssembly(NancyMarkdownAssemblyName);
         }
     }
 }

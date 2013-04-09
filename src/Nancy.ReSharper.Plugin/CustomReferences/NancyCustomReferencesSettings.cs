@@ -12,7 +12,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         private static readonly AssemblyNameInfo NancyRazorAssemblyName = new AssemblyNameInfo("Nancy.ViewEngines.Razor");
 
         [ContractAnnotation("=>true,version:notnull;=>false,version:null")]
-        public static bool IsProjectReferencingNancy([CanBeNull] IProjectElement projectElement, [CanBeNull] out Version version)
+        public static bool IsProjectReferencingNancy([CanBeNull] this IProjectElement projectElement, [CanBeNull] out Version version)
         {
             version = null;
 
@@ -23,13 +23,13 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return true;
         }
 
-        public static bool IsProjectReferencingNancyRazorViewEngine([CanBeNull] IProjectElement projectElement)
+        public static bool IsProjectReferencingNancyRazorViewEngine([CanBeNull] this IProjectElement projectElement)
         {
             AssemblyNameInfo referencedAssembly;
             return ReferencedAssembliesService.IsProjectReferencingAssemblyByName(projectElement, NancyRazorAssemblyName, out referencedAssembly);
         }
 
-        public static bool IsProjectReferencingAssembly([CanBeNull] IProjectElement projectElement, AssemblyNameInfo assemblyNameInfo)
+        public static bool IsProjectReferencingAssembly([CanBeNull] this IProjectElement projectElement, AssemblyNameInfo assemblyNameInfo)
         {
             AssemblyNameInfo referencedAssembly;
             return ReferencedAssembliesService.IsProjectReferencingAssemblyByName(projectElement, assemblyNameInfo, out referencedAssembly);

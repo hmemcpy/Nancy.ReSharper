@@ -11,7 +11,7 @@ namespace Nancy.ReSharper.Plugin.LiveTemplates
     {
         public override bool Accepts(IProject project)
         {
-            if (!NancyCustomReferencesSettings.IsProjectReferencingNancyRazorViewEngine(project))
+            if (!project.IsProjectReferencingNancyRazorViewEngine())
                 return false;
 
             return Language == ProjectLanguage.UNKNOWN || Language == project.DefaultLanguage;
