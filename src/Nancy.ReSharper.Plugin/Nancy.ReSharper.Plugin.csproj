@@ -54,10 +54,11 @@
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
     <Compile Include="CustomReferences\NancyIndexer.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProvider.cs" />
-    <Compile Include="CustomReferences\NancyRazorViewResolver.cs" />
     <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
-    <Compile Include="CustomReferences\NancyViewResolver.cs" />
-    <Compile Include="CustomReferences\NancyViewResolverBase.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyMarkdownViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyRazorViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyViewResolverBase.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpFileTemplatesSupport.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpProjectScopeProvider.cs" />

@@ -28,5 +28,11 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             AssemblyNameInfo referencedAssembly;
             return ReferencedAssembliesService.IsProjectReferencingAssemblyByName(projectElement, NancyRazorAssemblyName, out referencedAssembly);
         }
+
+        public static bool IsProjectReferencingAssembly([CanBeNull] IProjectElement projectElement, AssemblyNameInfo assemblyNameInfo)
+        {
+            AssemblyNameInfo referencedAssembly;
+            return ReferencedAssembliesService.IsProjectReferencingAssemblyByName(projectElement, assemblyNameInfo, out referencedAssembly);
+        }
     }
 }

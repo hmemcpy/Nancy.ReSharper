@@ -1,4 +1,5 @@
-﻿using JetBrains.ProjectModel;
+﻿using JetBrains.Metadata.Utils;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
@@ -6,6 +7,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
     [MvcViewResolver]
     public class NancyMarkdownViewResolver : NancyViewResolverBase
     {
+        private static readonly AssemblyNameInfo NancyMarkdownAssemblyName = new AssemblyNameInfo("Nancy.ViewEngines.Markdown");
+
         public NancyMarkdownViewResolver()
             : base(".md", ".markdown")
         {   
@@ -13,6 +16,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
 
         public override bool IsApplicable(IProject project)
         {
+            return NancyCustomReferencesSettings.IsProjectReferencingAssembly(project, NancyMarkdownAssemblyName);
         }
     }
 }
