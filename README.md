@@ -31,8 +31,8 @@ Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Na
 
 *Note*: You need ReSharper **7.1.2** or later to install this plugin!
 
-For the list of changes and currently supported features, please visit the [wiki](wiki).
+For the list of changes and currently supported features, please visit the [wiki](../../wiki).
 
 ## Bugs? Questions? Suggestions?
 
-Please feel free to [report them](issues)!
+Please feel free to [report them](../../issues)!
