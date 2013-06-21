@@ -21,7 +21,7 @@ The plugin adds support for the different view engines supported by Nancy! This 
 
 - Prevents ReSharper from marking Nancy modules and Bootstrappers from appearing 'unused'
 
-- [**And much more!**](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki)
+- [**And much more!**](../../wiki)
 
 ## What's in the box?
 
@@ -31,8 +31,8 @@ Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Na
 
 *Note*: You need ReSharper **7.1.2** or later to install this plugin!
 
-For the list of changes and currently supported features, please visit the [wiki](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/wiki).
+For the list of changes and currently supported features, please visit the [wiki](../../wiki).
 
 ## Bugs? Questions? Suggestions?
 
-Please feel free to [report them](https://github.com/hmemcpy/Nancy-ReSharper-Plugin/issues)!
+Please feel free to [report them](../../issues)!
