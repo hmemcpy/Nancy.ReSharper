@@ -27,18 +27,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>JET_MODE_ASSERT;DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT;SDK80</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;SDK80</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExposedObject">
+      <HintPath>..\packages\ExposedObject.1.2.0.0\lib\net40\ExposedObject.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -47,16 +50,23 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.8.x.cs" />
+    <Compile Include="CustomReferences\NancyMvcReferenceProvider.8.x.cs" />
     <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
-    <Compile Include="CustomReferences\NancyUtil.8.x.cs" />
-    <Compile Include="CustomReferences\NancyUtil.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.cs" />
     <Compile Include="CustomReferences\NancyMvcControllerReference.cs" />
     <Compile Include="CustomReferences\NancyMvcAreaReference.cs" />
     <Compile Include="CustomReferences\NancyMvcActionReference.cs" />
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProvider.cs" />
+    <Compile Include="CustomReferences\NancyReferenceProviderFactory.8.x.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
+    <Compile Include="CustomReferences\NancyUtil.8.x.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomReferences\NancyUtil.cs" />
     <Compile Include="CustomReferences\ViewResolvers\NancyMarkdownViewResolver.cs" />
     <Compile Include="CustomReferences\ViewResolvers\NancyRazorViewResolver.cs" />
     <Compile Include="CustomReferences\ViewResolvers\NancyViewResolver.cs" />
@@ -74,6 +84,9 @@
     <Compile Include="RazorCSharpNancyProjectFileLanguageService.cs" />
     <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
     <Compile Include="Updates\UpdatesNotifier.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v$(ReSharperSdkVersion)</ReSharperSdkTargets>

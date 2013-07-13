@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Linq;
-using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
+    // note: don't enter! here be dragons!
+    // for ReSharper 7.x
     public static partial class NancyUtil
     {
         private static ISearchDomain GetSearchDomain(IPsiModule module, IArgumentsOwner argumentsOwner)
         {
-            IModuleReferenceResolveContext context = argumentsOwner.GetResolveContext();
-
             ISearchDomain searchDomain = SearchDomainFactory.Instance.CreateSearchDomain(
-                module.GetPsiServices().Modules
-                      .GetModules()
-                      .Where(m => m.References(module, context) || module.References(m, context))
+                module.GetPsiServices().ModuleManager
+                      .GetAllModules().Where(m => m.References(module) || module.References(m))
                       .Prepend(module));
 
             return searchDomain;
@@ -26,7 +23,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         private static ITypeElement GetNancyModuleInterface(IArgumentsOwner argumentsOwner, IPsiModule module)
         {
-            return TypeFactory.CreateTypeByCLRName("Nancy.INancyModule", module, argumentsOwner.GetResolveContext()).GetTypeElement();            
+            return TypeFactory.CreateTypeByCLRName("Nancy.INancyModule", module).GetTypeElement();
         }
     }
 }

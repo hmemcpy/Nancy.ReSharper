@@ -13,19 +13,12 @@ using JetBrains.Util.Special;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
-    public abstract class NancyMvcReferenceProviderBase<TLiteral, TExpression, TMethod> : IReferenceFactory
+    public abstract partial class NancyMvcReferenceProviderBase<TLiteral, TExpression, TMethod> : IReferenceFactory
         where TLiteral : class, ILiteralExpression
         where TExpression : class, IArgumentsOwner, IInvocationInfo, ITreeNode
         where TMethod : class, ITypeOwnerDeclaration, ITypeMemberDeclaration
     {
-        private readonly MvcIndexer myIndexer;
         private readonly Version myVersion;
-
-        protected NancyMvcReferenceProviderBase([NotNull] MvcIndexer indexer, [NotNull] Version version)
-        {
-            myIndexer = indexer;
-            myVersion = version;
-        }
 
         public IReference[] GetReferences(ITreeNode element, IReference[] oldReferences)
         {
@@ -38,7 +31,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }))
                 return oldReferences;
             var expression1 = element as TExpression;
-            if (expression1 != null && HasImplicitReference(expression1, myIndexer.GetAllShortNames()))
+            if (expression1 != null && HasImplicitReference(expression1, GetAllMvcNames(expression1)))
                 return GetImplicitReferences(expression1).ToArray();
             TExpression argumentExpression;
             string anonymousPropertyName;

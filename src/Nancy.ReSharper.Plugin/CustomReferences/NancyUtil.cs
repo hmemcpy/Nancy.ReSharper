@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
@@ -12,21 +11,22 @@ using JetBrains.ReSharper.Feature.Services.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
-using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Resolve.Managed;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Services;
 using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Psi.Web.Tree;
 using JetBrains.Util;
-using JetBrains.Util.Special;
+
+#if SDK80
+using JetBrains.ReSharper.Psi.Modules;
+#endif
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     // note: don't enter! here be dragons!
-
+    // for ReSharper 7.x
     public static partial class NancyUtil
     {
         private const string ModuleClassSuffix = "Module";
@@ -34,7 +34,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         public const string AsyncActionSuffixInit = "Async";
         public const string AsyncActionSuffixCompleted = "Completed";
 
-        private static readonly ParameterKind[] NotAllowedParameterKinds = new[]
+        private static readonly ParameterKind[] NotAllowedParameterKinds =
         {
             ParameterKind.OUTPUT, ParameterKind.REFERENCE
         };
@@ -62,13 +62,15 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                     { MvcKind.Action, AnonymousPropertyInitializerRetriever }
                 };
 
-        public static readonly string[] AsyncActionSuffixes = new[]
-        { AsyncActionSuffixInit, AsyncActionSuffixCompleted };
+        public static readonly string[] AsyncActionSuffixes = { AsyncActionSuffixInit, AsyncActionSuffixCompleted };
 
         private static readonly string ourAspMvcActionNameSelectorAttribute = typeof(AspMvcActionSelectorAttribute).Name;
 
-        private static readonly Key<CachedPsiValue<ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>>>
-            ourCachedControllersKey = new Key<CachedPsiValue<ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>>>("CachedControllersKey");
+        private static readonly
+            Key<CachedPsiValue<ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>>>
+            ourCachedControllersKey =
+                new Key<CachedPsiValue <ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>>>(
+                    "CachedControllersKey");
 
         private static readonly IDictionary<MvcKind, MvcResolveErrorType> ourMvcResolveErrors =
             new Dictionary<MvcKind, MvcResolveErrorType>
@@ -83,61 +85,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 { MvcKind.Master, MvcResolveErrorType.MVC_MASTERPAGE_NOT_RESOLVED },
             };
 
-        public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module,
-                                                                       [CanBeNull] ICollection<string> areas = null,
-                                                                       bool includingIntermediateControllers = false,
-                                                                       ITypeElement baseClass = null)
-        {
-            ISearchDomain searchDomain = SearchDomainFactory.Instance.CreateSearchDomain(
-                module.GetPsiServices().ModuleManager
-                      .GetAllModules().Where(m => m.References(module) || module.References(m))
-                      .Prepend(module));
-
-            return GetAvailableModules(module, searchDomain, includingIntermediateControllers, baseClass);
-        }
-
-        public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module,
-                                                                       [NotNull] ISearchDomain searchDomain,
-                                                                       bool includingIntermediateControllers = false,
-                                                                       ITypeElement baseClass = null)
-        {
-            ITypeElement[] typeElements;
-
-            ITypeElement nancyModuleInterface = TypeFactory.CreateTypeByCLRName("Nancy.INancyModule", module).GetTypeElement();
-
-            if (baseClass != null)
-            {
-                if (baseClass.IsDescendantOf(nancyModuleInterface))
-                {
-                    typeElements = new[] { baseClass };
-                }
-                else
-                {
-                    return new OneToListMap<string, IClass>(0);
-                }
-            }
-            else
-            {
-                typeElements = new[] {  nancyModuleInterface };
-            }
-
-            var found = new List<IClass>();
-            foreach (ITypeElement typeElement in typeElements.WhereNotNull())
-            {
-                module.GetPsiServices().Finder.FindInheritors(typeElement, searchDomain, found.ConsumeDeclaredElements(), NullProgressIndicator.Instance);
-            }
-
-            IEnumerable<IClass> classes = found.Where(@class => @class.GetAccessRights() == AccessRights.PUBLIC);
-            if (!includingIntermediateControllers)
-            {
-                classes = classes.Where(@class =>!@class.IsAbstract &&
-                        @class.ShortName.EndsWith(ModuleClassSuffix, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return new OneToListMap<string, IClass>(
-                classes.GroupBy(GetControllerName, (name, enumerable) => new KeyValuePair<string, IList<IClass>>(name, enumerable.ToList())),
-                StringComparer.OrdinalIgnoreCase);
-        }
 
         private static string AnonymousPropertyInitializerRetriever(IAttributeInstance attr)
         {
@@ -159,15 +106,15 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return element
                 .GetAttributeInstances(false)
                 .SelectMany(attr =>
-                            MvcKinds.Where(pair => codeAnnotations.IsAnnotationAttribute(attr, pair.Key))
-                                    .Select(pair => JetTuple.Of
-                                                        (
-                                                            pair.Value,
-                                                            MvcKindAnonymousPropertyInitializers.ContainsKey(pair.Value)
-                                                                ? MvcKindAnonymousPropertyInitializers[pair.Value](attr)
-                                                                : null,
-                                                            attr
-                                                        )))
+                    MvcKinds.Where(pair => codeAnnotations.IsAnnotationAttribute(attr, pair.Key))
+                            .Select(pair => JetTuple.Of
+                                (
+                                    pair.Value,
+                                    MvcKindAnonymousPropertyInitializers.ContainsKey(pair.Value)
+                                        ? MvcKindAnonymousPropertyInitializers[pair.Value](attr)
+                                        : null,
+                                    attr
+                                )))
                 .ToList();
         }
 
@@ -186,84 +133,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return MvcKind.None;
         }
 
-        public static string GetActionName([NotNull] IMethod method)
-        {
-            string alternativeActionName = null;
-            foreach (IAttributeInstance attr in method.GetAttributeInstances(false))
-            {
-                ITypeElement typeElement = attr.AttributeType.GetTypeElement();
-                if (typeElement == null)
-                {
-                    continue;
-                }
-
-                CodeAnnotationsCache codeAnnotations = method.GetPsiServices().GetCodeAnnotationsCache();
-                Func<IAttributesSet, bool> validator =
-                    attrSet =>
-                    attrSet.GetAttributeInstances(true)
-                           .Any(_ => codeAnnotations.IsAnnotationAttribute(_, ourAspMvcActionNameSelectorAttribute));
-
-                AttributeValue attrValue = null;
-                IConstructor constructor = attr.Constructor;
-                if (constructor != null)
-                {
-                    for (int i = 0; i < constructor.Parameters.Count; i++)
-                    {
-                        IParameter parameter = constructor.Parameters[i];
-                        if (validator(parameter))
-                        {
-                            attrValue = attr.PositionParameter(i);
-                            break;
-                        }
-                    }
-                }
-
-                if (attrValue == null)
-                {
-                    foreach (var namedParameter in attr.NamedParameters())
-                    {
-                        foreach (var property in typeElement.GetAllClassMembers<IProperty>(namedParameter.First))
-                        {
-                            if (validator(property.Element))
-                            {
-                                attrValue = namedParameter.Second;
-                                break;
-                            }
-                        }
-                        if (attrValue != null)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if ((attrValue != null) && attrValue.IsConstant && attrValue.ConstantValue.IsString())
-                {
-                    alternativeActionName = attrValue.ConstantValue.Value as string;
-                    break;
-                }
-            }
-
-            if (alternativeActionName != null)
-            {
-                return alternativeActionName;
-            }
-
-            string actionName = method.ShortName;
-
-            ITypeElement containingType = method.GetContainingType();
-            if (containingType != null &&
-                containingType.IsDescendantOf(MvcElementsCache.GetInstance(method.Module).MvcAsyncControllerClass))
-            {
-                return AsyncActionSuffixes
-                           .Where(suffix => actionName.EndsWith(suffix, StringComparison.Ordinal))
-                           .Select(suffix => actionName.Substring(0, actionName.Length - suffix.Length))
-                           .FirstOrDefault() ?? actionName;
-            }
-
-            return actionName;
-        }
-
         [CanBeNull]
         public static string GetControllerArea([CanBeNull] ITypeElement controller)
         {
@@ -280,7 +149,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                     let areasFolder = project.Location.Combine(AreasFolder)
                     where areasFolder.IsPrefixOf(location)
                     select location.ConvertToRelativePath(areasFolder).GetPathComponents().FirstOrDefault()
-                )
+                    )
                     .WhereNotNull()
                     .FirstOrDefault();
         }
@@ -353,8 +222,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         [NotNull]
         public static FileSystemPath GetControllerFolder([CanBeNull] IProject project, [CanBeNull] string area,
-                                                         [CanBeNull] string controllerName,
-                                                         MvcKind mvcKind = MvcKind.View)
+            [CanBeNull] string controllerName,
+            MvcKind mvcKind = MvcKind.View)
         {
             if ((project == null) || (controllerName == null))
             {
@@ -377,19 +246,23 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return FileSystemPath.Empty;
         }
 
-        public static IEnumerable<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> GetModules([CanBeNull] IArgumentsOwner argumentsOwner)
+        public static IEnumerable<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> GetModules(
+            [CanBeNull] IArgumentsOwner argumentsOwner)
         {
             if ((argumentsOwner == null) || !argumentsOwner.IsValid())
             {
                 return EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>.InstanceList;
             }
 
-            var cachedData = argumentsOwner.UserData.GetOrCreateData(ourCachedControllersKey, () => argumentsOwner.CreateCachedValue(GetModulesNotCached(argumentsOwner)));
+            CachedPsiValue<ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>>
+                cachedData = argumentsOwner.UserData.GetOrCreateData(ourCachedControllersKey,
+                    () => argumentsOwner.CreateCachedValue(GetModulesNotCached(argumentsOwner)));
 
             return cachedData.GetValue(argumentsOwner, () => GetModulesNotCached(argumentsOwner));
         }
 
-        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>GetModulesNotCached([NotNull] IArgumentsOwner argumentsOwner)
+        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>
+            GetModulesNotCached([NotNull] IArgumentsOwner argumentsOwner)
         {
             argumentsOwner.AssertIsValid("argumentsOwner is invalid");
             IPsiModule psiModule = argumentsOwner.GetPsiModule();
@@ -401,7 +274,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
             IList<string> controllerNames = ProcessArgumentsExpression(argumentsOwner, MvcKind.Controller);
 
-            ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, bool>> moduleNames = new List<JetTuple<string, string, MvcUtil.DeterminationKind, bool>>();
+            ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, bool>> moduleNames =
+                new List<JetTuple<string, string, MvcUtil.DeterminationKind, bool>>();
 
             if (controllerNames.IsEmpty())
             {
@@ -409,102 +283,50 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
                 var typeDeclaration = argumentsOwner.GetContainingNode<ITypeDeclaration>();
                 IClass declaredElement = (typeDeclaration != null)
-                                             ? typeDeclaration.DeclaredElement as IClass
-                                             : null;
+                    ? typeDeclaration.DeclaredElement as IClass
+                    : null;
 
                 if (declaredElement == null)
                 {
                     return EmptyList<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>.InstanceList;
                 }
 
-                var @default = JetTuple.Of(GetControllerArea(declaredElement),
-                                           GetControllerName(declaredElement),
-                                           MvcUtil.DeterminationKind.ImplicitByContainingMember,
-                                           (ICollection<IClass>)new IClass[] { null });
+                JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>> @default =
+                    JetTuple.Of(GetControllerArea(declaredElement),
+                        GetControllerName(declaredElement),
+                        MvcUtil.DeterminationKind.ImplicitByContainingMember,
+                        (ICollection<IClass>)new IClass[] { null });
 
                 // with inheritors
                 if (declaredElement.IsAbstract)
                 {
                     // with inheritors
-                    return GetAvailableModules(psiModule, baseClass: declaredElement)
+                    return GetAvailableModules(psiModule, argumentsOwner, baseClass: declaredElement)
                         .SelectMany(_ => _.Value)
-                        .GroupBy(@class => new { area = GetControllerArea(@class), controller = GetControllerName(@class) })
+                        .GroupBy(
+                            @class => new { area = GetControllerArea(@class), controller = GetControllerName(@class) })
                         .Select(_ => JetTuple.Of(_.Key.area, _.Key.controller,
-                                        MvcUtil.DeterminationKind.ImplicitByContainingMember,
-                                        (ICollection<IClass>)_.ToList()))
+                            MvcUtil.DeterminationKind.ImplicitByContainingMember,
+                            (ICollection<IClass>)_.ToList()))
                         .DefaultIfEmpty(@default)
                         .ToList();
                 }
 
-                moduleNames = new[] { JetTuple.Of(@default.A, @default.B, MvcUtil.DeterminationKind.ImplicitByContainingMember, true) };
+                moduleNames = new[]
+                { JetTuple.Of(@default.A, @default.B, MvcUtil.DeterminationKind.ImplicitByContainingMember, true) };
             }
 
             return (from tuple in moduleNames
-                    let availableModules = GetAvailableModules(psiModule, new[] { tuple.A }, tuple.D)
-                    select JetTuple.Of(tuple.A, tuple.B, tuple.C, tuple.B == null
-                                                                      ? (ICollection<IClass>)new IClass[] { null }
-                                                                      : availableModules.GetValuesCollection(tuple.B)))
+                let availableModules = GetAvailableModules(psiModule, argumentsOwner, areas: new[] { tuple.A }, includingIntermediateControllers: tuple.D)
+                select JetTuple.Of(tuple.A, tuple.B, tuple.C, tuple.B == null
+                    ? (ICollection<IClass>)new IClass[] { null }
+                    : availableModules.GetValuesCollection(tuple.B)))
                 .ToList();
         }
 
-        /// <returns>First is return type, rest - arguments types</returns>
-        public static IEnumerable<AnonymousTypeDescriptor> DetermineActionParameters(ITreeNode node)
-        {
-            IPsiModule psiModule = node.GetPsiModule();
-            var helper =
-                node.GetSolution().GetComponent<ILanguageManager>().GetService<IMvcLanguageHelper>(node.Language);
-            var argumentsOwner =
-                (node.GetContainingNode<IArgument>(true) ?? node).GetContainingNode<IArgumentsOwner>(true);
-            if (helper.IsAttribute(argumentsOwner))
-            {
-                // currently only for RemoteAttribute validation, so return type is bool
-                yield return new AnonymousTypeDescriptor(null, psiModule.GetPredefinedType().Bool, false);
-                foreach (
-                    ITypeOwnerDeclaration decl in
-                        helper.GetAttributeDeclarations(argumentsOwner).OfType<ITypeOwnerDeclaration>())
-                {
-                    yield return new AnonymousTypeDescriptor(decl.DeclaredName, decl.Type, false);
-                }
-            }
-            else
-            {
-                yield return new AnonymousTypeDescriptor(null, MvcElementsCache.GetInstance(psiModule).MvcActionResultClassType,
-                                                false);
-                foreach (var pair in RetrieveArgumentExpressions(argumentsOwner, MvcKind.ModelType, true))
-                {
-                    IType type = pair.First.Type();
-                    if (type.IsUnknown)
-                    {
-                        continue;
-                    }
-
-                    if (type is IAnonymousType)
-                    {
-                        var anonymousType = (IAnonymousType)type;
-
-                        JetHashSet<string> excludeProps = pair.Second.SelectNotNull(_ => _.B)
-                                                              .ToHashSet(JetFunc<string>.Identity,
-                                                                         StringComparer.OrdinalIgnoreCase);
-                        foreach (
-                            AnonymousTypeDescriptor property in
-                                anonymousType.TypeDescriptor.Where(_ => !excludeProps.Contains(_.Name)))
-                        {
-                            yield return property;
-                        }
-                        continue;
-                    }
-
-                    if (!type.IsObject())
-                    {
-                        yield return new AnonymousTypeDescriptor(null, type, false);
-                    }
-                }
-            }
-        }
-
         public static bool IsModelTypeExpression([NotNull] ITreeNode node, out IArgument argument,
-                                                 out IList<JetTuple<IWebFileWithCodeBehind, IDeclaredType, IType>>
-                                                     modelTypes)
+            out IList<JetTuple<IWebFileWithCodeBehind, IDeclaredType, IType>>
+                modelTypes)
         {
             modelTypes = null;
             argument = node.GetContainingNode<IArgument>(true);
@@ -554,14 +376,22 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                     where viewFile != null
                     from superType in viewFile.GetSuperTypes()
                     from baseTypeName in FileSpecificUtil.GetMvcViewWithModelBaseTypes(view)
+#if SDK80
+                    let baseType = TypeFactory.CreateTypeByCLRName(baseTypeName, psiModule, node.GetResolveContext())
+#else
                     let baseType = TypeFactory.CreateTypeByCLRName(baseTypeName, psiModule)
+#endif
                     let modelTypeParameter = baseType.GetSubstitution().Domain.Single()
+#if SDK80
+                    from concreteBaseType in superType.GetSuperType(baseType.GetTypeElement(), node.GetResolveContext())
+#else
                     from concreteBaseType in superType.GetSuperType(baseType.GetTypeElement())
+#endif
                     where !concreteBaseType.IsUnknown
                     let modelType = concreteBaseType.GetSubstitution()[modelTypeParameter]
                     where !modelType.IsUnknown
                     select JetTuple.Of(viewFile, superType, modelType)
-                ).ToList();
+                    ).ToList();
 
             return true;
         }
@@ -570,8 +400,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         {
             Func<IEnumerable<IType>, IType> typeChecker =
                 types =>
-                types.FirstOrDefault(
-                    type => type != null && !type.IsUnknown && !type.IsObject() && !(type is IAnonymousType));
+                    types.FirstOrDefault(
+                        type => type != null && !type.IsUnknown && !type.IsObject() && !(type is IAnonymousType));
 
             // first, try determine type of explicitly specified model
             IType modelType = typeChecker(
@@ -586,7 +416,12 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 IPsiServices psiServices = node.GetPsiServices();
                 ISolution solution = psiServices.Solution;
                 var languageManager = solution.GetComponent<ILanguageManager>();
+#if SDK80
+                IMvcElementsCache mvcElementsCache = MvcElementsCache.GetInstance(node.GetPsiModule(), node.GetResolveContext());
+#else
                 IMvcElementsCache mvcElementsCache = MvcElementsCache.GetInstance(node.GetPsiModule());
+
+#endif
                 List<IDeclaredElement> setters =
                     new[]
                     { mvcElementsCache.MvcViewDataDictionaryClass, mvcElementsCache.MvcTypedViewDataDictionaryClass }
@@ -594,10 +429,10 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                         .SelectMany(typeElement => typeElement.Properties)
                         .Where(
                             property =>
-                            String.Equals(property.ShortName, "Model",
-                                          property.CaseSensistiveName
-                                              ? StringComparison.Ordinal
-                                              : StringComparison.OrdinalIgnoreCase))
+                                String.Equals(property.ShortName, "Model",
+                                    property.CaseSensistiveName
+                                        ? StringComparison.Ordinal
+                                        : StringComparison.OrdinalIgnoreCase))
                         .Select<IProperty, IDeclaredElement>(property => property.Setter)
                         .ToList();
                 ISearchDomain searchDomain =
@@ -605,15 +440,15 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                             .CreateSearchDomain(node.GetContainingNode<ITypeOwnerDeclaration>() ?? node);
                 var references = new List<IReference>();
                 psiServices.Finder.Find(setters, searchDomain, references.ConsumeReferences(),
-                                        SearchPattern.FIND_USAGES | SearchPattern.FIND_RELATED_ELEMENTS,
-                                        NullProgressIndicator.Instance);
+                    SearchPattern.FIND_USAGES | SearchPattern.FIND_RELATED_ELEMENTS,
+                    NullProgressIndicator.Instance);
                 modelType = typeChecker(references
-                                            .Select(reference => reference.GetTreeNode())
-                                            .OfType<IExpression>()
-                                            .Select(
-                                                expression =>
-                                                languageManager.GetService<IMvcLanguageHelper>(expression.Language)
-                                                               .GetAssigmentType(expression)))
+                    .Select(reference => reference.GetTreeNode())
+                    .OfType<IExpression>()
+                    .Select(
+                        expression =>
+                            languageManager.GetService<IMvcLanguageHelper>(expression.Language)
+                                           .GetAssigmentType(expression)))
                             ?? defaultType; // default type, fallback
             }
 
@@ -627,11 +462,13 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         private static IEnumerable<Pair<IExpression, ICollection<JetTuple<MvcKind, string, IAttributeInstance>>>>
             RetrieveArgumentExpressions([CanBeNull] IArgumentsOwner argumentsOwner, MvcKind? kind = null,
-                                        bool returnAllKinds = false)
+                bool returnAllKinds = false)
         {
             if (argumentsOwner == null)
             {
-                return EmptyList<Pair<IExpression, ICollection<JetTuple<MvcKind, string, IAttributeInstance>>>>.InstanceList;
+                return
+                    EmptyList<Pair<IExpression, ICollection<JetTuple<MvcKind, string, IAttributeInstance>>>>
+                        .InstanceList;
             }
 
             return
@@ -651,28 +488,32 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 
         private static IList<string> ProcessArgumentsExpression(IArgumentsOwner argumentsOwner, MvcKind kind)
         {
+#if SDK80
+            IDeclaredType stringType = TypeFactory.CreateTypeByCLRName(PredefinedType.STRING_FQN, argumentsOwner.GetPsiModule(), argumentsOwner.GetResolveContext());
+#else
             IDeclaredType stringType = TypeFactory.CreateTypeByCLRName(PredefinedType.STRING_FQN, argumentsOwner.GetPsiModule());
+#endif
 
             var enumerabe1 = from expression in RetrieveArgumentExpressions(argumentsOwner, kind)
-                            let finder = new RecursiveElementCollector<IExpression>(
-                                literalExpression =>
-                                {
-                                    if (!literalExpression.GetExpressionType().IsImplicitlyConvertibleTo(
-                                        stringType, IntentionLanguageSpecific.GetTypeConversion(literalExpression)))
-                                    {
-                                        return false;
-                                    }
+                let finder = new RecursiveElementCollector<IExpression>(
+                    literalExpression =>
+                    {
+                        if (!literalExpression.GetExpressionType().IsImplicitlyConvertibleTo(
+                            stringType, IntentionLanguageSpecific.GetTypeConversion(literalExpression)))
+                        {
+                            return false;
+                        }
 
-                                    string initializerName;
-                                    IInvocationInfo invocationInfo;
-                                    GetMvcLiteral(literalExpression, out invocationInfo, out initializerName);
-                                    return (invocationInfo == argumentsOwner) &&
-                                           expression.Second.Any(_ => StringComparer.OrdinalIgnoreCase.Equals(_.B, initializerName));
-                                })
-                            select new { finder, expression };
+                        string initializerName;
+                        IInvocationInfo invocationInfo;
+                        GetMvcLiteral(literalExpression, out invocationInfo, out initializerName);
+                        return (invocationInfo == argumentsOwner) &&
+                               expression.Second.Any(_ => StringComparer.OrdinalIgnoreCase.Equals(_.B, initializerName));
+                    })
+                select new { finder, expression };
             return (from x in enumerabe1
-                    from literal in x.finder.ProcessElement(x.expression.First).GetResults()
-                    select literal.ConstantValue.Value as string).ToList();
+                from literal in x.finder.ProcessElement(x.expression.First).GetResults()
+                select literal.ConstantValue.Value as string).ToList();
         }
 
         public static IResolveInfo CheckMvcResolveResult([NotNull] IResolveInfo result, MvcKind mvcKind)
@@ -683,14 +524,14 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
 
             return result == ResolveErrorType.NOT_RESOLVED
-                       ? ourMvcResolveErrors.TryGetValue(mvcKind, MvcResolveErrorType.MVC_NOT_RESOLVED)
-                       : result;
+                ? ourMvcResolveErrors.TryGetValue(mvcKind, MvcResolveErrorType.MVC_NOT_RESOLVED)
+                : result;
         }
 
         [CanBeNull]
         public static IExpression GetMvcLiteral<TExpression>([NotNull] IExpression literal,
-                                                             [CanBeNull] out TExpression expression,
-                                                             [CanBeNull] out string anonymousPropertyName)
+            [CanBeNull] out TExpression expression,
+            [CanBeNull] out string anonymousPropertyName)
             where TExpression : class, IInvocationInfo
         {
             literal.AssertIsValid("element is not valid");
@@ -754,6 +595,65 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 default:
                     return MvcViewLocationType.Unknown;
             }
+        }
+
+        public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module,
+                                                                       [CanBeNull] IArgumentsOwner argumentsOwner,
+                                                                       [CanBeNull] ICollection<string> areas = null,
+                                                                       bool includingIntermediateControllers = false,
+                                                                       ITypeElement baseClass = null)
+        {
+            var searchDomain = GetSearchDomain(module, argumentsOwner);
+
+            return GetAvailableModules(module, argumentsOwner, searchDomain, includingIntermediateControllers, baseClass);
+        }
+
+        public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module, 
+            IArgumentsOwner argumentsOwner, 
+            [NotNull] ISearchDomain searchDomain, 
+            bool includingIntermediateControllers = false, 
+            ITypeElement baseClass = null)
+        {
+            ITypeElement[] typeElements;
+
+            ITypeElement nancyModuleInterface = GetNancyModuleInterface(argumentsOwner, module);
+
+            if (baseClass != null)
+            {
+                if (baseClass.IsDescendantOf(nancyModuleInterface))
+                {
+                    typeElements = new[] { baseClass };
+                }
+                else
+                {
+                    return new OneToListMap<string, IClass>(0);
+                }
+            }
+            else
+            {
+                typeElements = new[] { nancyModuleInterface };
+            }
+
+            var found = new List<IClass>();
+            foreach (ITypeElement typeElement in typeElements.WhereNotNull())
+            {
+                module.GetPsiServices()
+                      .Finder.FindInheritors(typeElement, searchDomain, found.ConsumeDeclaredElements(),
+                          NullProgressIndicator.Instance);
+            }
+
+            IEnumerable<IClass> classes = found.Where(@class => @class.GetAccessRights() == AccessRights.PUBLIC);
+            if (!includingIntermediateControllers)
+            {
+                classes = classes.Where(@class => !@class.IsAbstract &&
+                                                  @class.ShortName.EndsWith(ModuleClassSuffix,
+                                                      StringComparison.OrdinalIgnoreCase));
+            }
+
+            return new OneToListMap<string, IClass>(
+                classes.GroupBy(GetControllerName,
+                    (name, enumerable) => new KeyValuePair<string, IList<IClass>>(name, enumerable.ToList())),
+                StringComparer.OrdinalIgnoreCase);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Nancy.ReSharper.Plugin.LiveTemplates
             if (!project.IsProjectReferencingNancyRazorViewEngine())
                 return false;
 
-            return Language == ProjectLanguage.UNKNOWN || Language == project.DefaultLanguage;
+            return Language == ProjectLanguage.UNKNOWN || Language == project.ProjectProperties.DefaultLanguage;
         }
     }
 }

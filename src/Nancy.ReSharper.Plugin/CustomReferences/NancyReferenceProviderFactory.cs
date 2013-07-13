@@ -11,7 +11,7 @@ using System;
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     [ReferenceProviderFactory]
-    public class NancyReferenceProviderFactory : IReferenceProviderFactory
+    public partial class NancyReferenceProviderFactory : IReferenceProviderFactory
     {
         private readonly ISolution solution;
 
@@ -40,7 +40,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 return null;
             }
 
-            return new NancyMvcReferenceProvider(solution.GetComponent<MvcIndexer>(), version);
+            return CreateProvider(version);
         }
 
         private void FireOnChanged()
