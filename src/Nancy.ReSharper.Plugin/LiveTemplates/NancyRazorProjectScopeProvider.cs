@@ -24,7 +24,7 @@ namespace Nancy.ReSharper.Plugin.LiveTemplates
         public override IEnumerable<ITemplateScopePoint> ProvideScopePoints(TemplateAcceptanceContext context)
         {
             IProject project = context.GetProject();
-            if (project != null && NancyCustomReferencesSettings.IsProjectReferencingNancyRazorViewEngine(project))
+            if (project != null && project.IsProjectReferencingNancyRazorViewEngine())
                 yield return new InAnyRazorProject();
         }
     }

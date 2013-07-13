@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <ReSharperSdkVersion>7.1</ReSharperSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -12,8 +15,8 @@
     <AssemblyName>Nancy.ReSharper.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\output\$(Configuration)\</OutputPath>
-    <TargetFrameworkProfile />
+    <OutputPath>..\..\output\$(Configuration)\$(ReSharperSdkVersion)\</OutputPath>
+    <BaseIntermediateOutputPath>obj\$(ReSharperSdkVersion)</BaseIntermediateOutputPath>
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)\devenv.exe</StartProgram>
     <StartArguments>/rootsuffix NancyFX /ReSharper.Plugin Nancy.ReSharper.Plugin.dll /ReSharper.Internal</StartArguments>
@@ -44,20 +47,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomReferences\MvcViewReferenceBase.cs" />
-    <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
+    <Compile Include="CustomReferences\NancyReferenceProviderFactory.7.x.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomReferences\NancyUtil.7.x.cs" />
     <Compile Include="CustomReferences\NancyUtil.cs" />
+    <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.7.x.cs" />
+    <Compile Include="CustomReferences\NancyMvcReferenceProvider.7.x.cs" />
+    <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.cs" />
     <Compile Include="CustomReferences\NancyMvcControllerReference.cs" />
     <Compile Include="CustomReferences\NancyMvcAreaReference.cs" />
     <Compile Include="CustomReferences\NancyMvcActionReference.cs" />
     <Compile Include="CustomReferences\NancyCustomReferencesSettings.cs" />
-    <Compile Include="CustomReferences\NancyIndexer.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProvider.cs" />
-    <Compile Include="CustomReferences\NancyRazorViewResolver.cs" />
     <Compile Include="CustomReferences\NancyReferenceProviderFactory.cs" />
-    <Compile Include="CustomReferences\NancyViewResolver.cs" />
-    <Compile Include="CustomReferences\NancyViewResolverBase.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyMarkdownViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyRazorViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyViewResolver.cs" />
+    <Compile Include="CustomReferences\ViewResolvers\NancyViewResolverBase.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpFileTemplatesSupport.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpProjectScopeProvider.cs" />
@@ -73,8 +81,8 @@
     <Compile Include="Updates\UpdatesNotifier.cs" />
   </ItemGroup>
   <PropertyGroup>
-    <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.1</ReSharperSdkTargets>
-    <ReSharperSdkBinaries Condition="'$(ReSharperSdkBinaries)'==''">C:\Program Files (x86)\JetBrains\ReSharper\v7.1\bin</ReSharperSdkBinaries>
+    <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v$(ReSharperSdkVersion)</ReSharperSdkTargets>
+    <ReSharperSdkBinaries Condition="'$(ReSharperSdkBinaries)'==''">C:\Program Files (x86)\JetBrains\ReSharper\v$(ReSharperSdkVersion)\bin</ReSharperSdkBinaries>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ReSharperSdkTargets)\Plugin.Targets" />

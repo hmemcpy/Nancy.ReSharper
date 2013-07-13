@@ -1,21 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.csproj", "{02213EAF-0445-4550-9BE1-A3CFFB39156C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.7.x", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.7.x.csproj", "{02213EAF-0445-4550-9BE1-A3CFFB39156C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.8.x", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.8.x.csproj", "{81B5B56F-F458-4199-A1DA-58B14F0D4890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.All|Any CPU.ActiveCfg = Release|Any CPU
-		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.All|Any CPU.Build.0 = Release|Any CPU
 		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02213EAF-0445-4550-9BE1-A3CFFB39156C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B5B56F-F458-4199-A1DA-58B14F0D4890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B5B56F-F458-4199-A1DA-58B14F0D4890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B5B56F-F458-4199-A1DA-58B14F0D4890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B5B56F-F458-4199-A1DA-58B14F0D4890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

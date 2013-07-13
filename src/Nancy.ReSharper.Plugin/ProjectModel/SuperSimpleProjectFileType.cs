@@ -10,6 +10,7 @@ namespace Nancy.ReSharper.Plugin.ProjectModel
         public new const string PresentableName = "Nancy Super Simple View";
         
         [CanBeNull]
+        [UsedImplicitly]
         public new static readonly SuperSimpleProjectFileType Instance;
 
         private SuperSimpleProjectFileType()
