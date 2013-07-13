@@ -55,7 +55,7 @@ namespace Nancy.ReSharper.Plugin.Daemon
         internal static bool IsNancyProject(IProjectElement project)
         {
             Version version;
-            return NancyCustomReferencesSettings.IsProjectReferencingNancy(project, out version);
+            return project.IsProjectReferencingNancy(out version);
         }
     }
 }

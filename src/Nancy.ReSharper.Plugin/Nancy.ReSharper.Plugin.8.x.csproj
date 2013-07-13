@@ -82,8 +82,6 @@
     <Compile Include="QuickFixes\NancyAspCSharpMvcQuickFixTemplateProvider.cs" />
     <Compile Include="QuickFixes\NancyRazorCSharpMvcQuickFixTemplateProvider.cs" />
     <Compile Include="RazorCSharpNancyProjectFileLanguageService.cs" />
-    <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
-    <Compile Include="Updates\UpdatesNotifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
