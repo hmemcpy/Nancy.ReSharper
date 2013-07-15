@@ -39,9 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExposedObject">
-      <HintPath>..\packages\ExposedObject.1.2.0.0\lib\net40\ExposedObject.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -82,9 +79,6 @@
     <Compile Include="QuickFixes\NancyAspCSharpMvcQuickFixTemplateProvider.cs" />
     <Compile Include="QuickFixes\NancyRazorCSharpMvcQuickFixTemplateProvider.cs" />
     <Compile Include="RazorCSharpNancyProjectFileLanguageService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v$(ReSharperSdkVersion)</ReSharperSdkTargets>

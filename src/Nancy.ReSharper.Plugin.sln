@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.7.x", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.7.x.csproj", "{02213EAF-0445-4550-9BE1-A3CFFB39156C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.8.x", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.8.x.csproj", "{81B5B56F-F458-4199-A1DA-58B14F0D4890}"
