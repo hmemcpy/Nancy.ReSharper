@@ -13,6 +13,7 @@ namespace Nancy.ReSharper.Plugin.QuickFixes
         {
             // ReSharper will suggest the "default" quickfix items for MVC-like projects, which include ASPX views generation.
             // ASPX views are not used in Nancy, so we return false here to prevent R# from suggesting them.
+
             return false;
         }
     }

@@ -33,7 +33,7 @@ namespace Nancy.ReSharper.Plugin.Daemon
             }
 
             Version version;
-            if (!NancyCustomReferencesSettings.IsProjectReferencingNancy(projectFile, out version))
+            if (!projectFile.IsProjectReferencingNancy(out version))
             {
                 return Enumerable.Empty<IDaemonStageProcess>();
             }
@@ -55,7 +55,7 @@ namespace Nancy.ReSharper.Plugin.Daemon
         internal static bool IsNancyProject(IProjectElement project)
         {
             Version version;
-            return NancyCustomReferencesSettings.IsProjectReferencingNancy(project, out version);
+            return project.IsProjectReferencingNancy(out version);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Nancy.ReSharper.Plugin.QuickFixes
     {
         bool IMvcQuickFixTemplateProvider.IsAvailable(IProjectItem context)
         {
-            return NancyCustomReferencesSettings.IsProjectReferencingNancyRazorViewEngine(context);
+            return context.IsProjectReferencingNancyRazorViewEngine();
         }
     }
 }

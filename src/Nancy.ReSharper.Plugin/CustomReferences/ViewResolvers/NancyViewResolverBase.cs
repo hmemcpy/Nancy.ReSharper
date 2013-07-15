@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.Util;
 
-namespace Nancy.ReSharper.Plugin.CustomReferences
+namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
 {
     public abstract class NancyViewResolverBase : IMvcViewResolver
     {
