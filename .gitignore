@@ -60,3 +60,4 @@ _ReSharper*/
 *ncrunch*
 *crunch*.local.xml
 *.back.aip
+*.nupkg
