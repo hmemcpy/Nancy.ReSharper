@@ -69,6 +69,7 @@
     <Compile Include="CustomReferences\ViewResolvers\NancyViewResolver.cs" />
     <Compile Include="CustomReferences\ViewResolvers\NancyViewResolverBase.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
+    <Compile Include="LiveLoadingHack\LiveLoadingRestartRequired.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpFileTemplatesSupport.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpProjectScopeProvider.cs" />
     <Compile Include="LiveTemplates\NancyRazorCSharpFileTemplatesSupport.cs" />

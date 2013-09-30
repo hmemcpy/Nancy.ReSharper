@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.ProjectModel;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {

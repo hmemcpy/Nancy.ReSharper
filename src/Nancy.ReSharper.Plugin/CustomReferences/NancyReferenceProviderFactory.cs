@@ -14,7 +14,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
     public partial class NancyReferenceProviderFactory : IReferenceProviderFactory
     {
         private readonly ISolution solution;
-
+        
         public event Action OnChanged = delegate { };
 
         public NancyReferenceProviderFactory(Lifetime lifetime, ISolution solution, ISettingsStore settingsStore, MvcReferenceProviderValidator providerValidator)

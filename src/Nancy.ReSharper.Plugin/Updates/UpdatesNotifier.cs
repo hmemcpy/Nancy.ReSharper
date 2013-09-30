@@ -19,7 +19,7 @@ namespace Nancy.ReSharper.Plugin.Updates
             {
                 // We can customize the local environment info that the xslt will be applied to
                 // It should be an instance of UpdateLocalEnvironmentInfo, bail out early if it's
-                // not. The only reason it wouldn't be is if someone has got hold of the "NuGetSupport"
+                // not. The only reason it wouldn't be is if someone has got hold of the "NancyFxSupport"
                 // category and subscribed to the CustomizeLocalEnvironmentInfo signal. Unlikely.
                 if (!(args.Out is UpdateLocalEnvironmentInfoVs))
                     return;
