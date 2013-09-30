@@ -4,7 +4,7 @@ if "%config%" == "" (
    set config=Release
 )
  
-set version=0.1.2
+set version=0.1.2.1
 if not "%PackageVersion%" == "" (
    set version=%PackageVersion%
 )
@@ -16,4 +16,4 @@ if "%nuget%" == "" (
 
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild src\Nancy.ReSharper.Plugin.sln /t:Rebuild /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
  
-%nuget% pack "src\.nuget\Nancy.ReSharper.nuspec" -NoPackageAnalysis -verbosity detailed -o . -Version %version%-EAP13276 -p Configuration="%config%"
+%nuget% pack "src\.nuget\Nancy.ReSharper.nuspec" -NoPackageAnalysis -verbosity detailed -o . -Version %version% -p Configuration="%config%"
