@@ -5,7 +5,7 @@
     <version>$version$</version>
     <authors>Igal Tabachnik</authors>
     <owners>Igal Tabachnik</owners>
-    <title>NancyFx</title>
+    <title>Nancy.ReSharper</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://raw.github.com/NancyFx/Nancy/master/license.txt</licenseUrl>
     <description>Nancy plugin for ReSharper adds navigation and intellisense support for NancyFx (http://nancyfx.org) in ReSharper, for super-duper-happy-path web development!</description>
