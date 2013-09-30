@@ -23,13 +23,15 @@ The plugin adds support for the different view engines supported by Nancy! This 
 
 - [**And much more!**](../../wiki)
 
-## What's in the box?
+## Installation
 
-Why don't you [**download the plugin**](http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.0.1.2.msi?direct) and find out?
+###For ReSharper 8
 
-**Latest version: v0.1.2**
+For ReSharper 8.0, simply install [**Nancy.ReSharper**](https://resharper-plugins.jetbrains.com/packages/Nancy.ReSharper) from the Extension Manager, available from the ReSharper menu.
 
-*Note*: You need ReSharper **7.1.2** or later to install this plugin!
+###For ReSharper 7
+
+[Download the installer](http://dl.bintray.com/content/hmemcpy/Nancy-ReSharper-Plugin/NancyReSharperPlugin.0.1.2.msi?direct) (ReSharper **v7.1.2** or later required)
 
 For the list of changes and currently supported features, please visit the [wiki](../../wiki).
 
