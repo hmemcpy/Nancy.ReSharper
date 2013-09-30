@@ -32,7 +32,7 @@ namespace Nancy.ReSharper.Plugin
 
         public override PsiLanguageType GetPsiLanguageType(IProjectFile projectFile)
         {
-            if (NancyCustomReferencesSettings.IsProjectReferencingNancyRazorViewEngine(projectFile))
+            if (projectFile.IsProjectReferencingNancyRazorViewEngine())
             {
                 return GetPsiLanguageType(projectFile.LanguageType);
             }
@@ -42,7 +42,7 @@ namespace Nancy.ReSharper.Plugin
 
         public override IPsiSourceFileProperties GetPsiProperties(IProjectFile projectFile, IPsiSourceFile sourceFile)
         {
-            if (!NancyCustomReferencesSettings.IsProjectReferencingNancyRazorViewEngine(projectFile))
+            if (!projectFile.IsProjectReferencingNancyRazorViewEngine())
             {
                 return base.GetPsiProperties(projectFile, sourceFile);
             }

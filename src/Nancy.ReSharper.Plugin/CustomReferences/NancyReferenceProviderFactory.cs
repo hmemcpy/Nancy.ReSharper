@@ -11,10 +11,10 @@ using System;
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     [ReferenceProviderFactory]
-    public class NancyReferenceProviderFactory : IReferenceProviderFactory
+    public partial class NancyReferenceProviderFactory : IReferenceProviderFactory
     {
         private readonly ISolution solution;
-
+        
         public event Action OnChanged = delegate { };
 
         public NancyReferenceProviderFactory(Lifetime lifetime, ISolution solution, ISettingsStore settingsStore, MvcReferenceProviderValidator providerValidator)
@@ -35,12 +35,12 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 return null;
 
             Version version;
-            if (!NancyCustomReferencesSettings.IsProjectReferencingNancy(projectFile, out version))
+            if (!projectFile.IsProjectReferencingNancy(out version))
             {
                 return null;
             }
 
-            return new NancyMvcReferenceProvider(solution.GetComponent<NancyIndexer>(), version);
+            return CreateProvider(version);
         }
 
         private void FireOnChanged()

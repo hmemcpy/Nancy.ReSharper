@@ -1,9 +1,8 @@
-﻿using System;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using Nancy.ReSharper.Plugin.Daemon;
 
-namespace Nancy.ReSharper.Plugin.CustomReferences
+namespace Nancy.ReSharper.Plugin.CustomReferences.ViewResolvers
 {
     [MvcViewResolver]
     public class NancyViewResolver : NancyViewResolverBase
