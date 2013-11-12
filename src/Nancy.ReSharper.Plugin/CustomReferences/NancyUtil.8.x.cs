@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Search;
@@ -14,8 +15,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         private static ISearchDomain GetSearchDomain(IPsiModule module, IArgumentsOwner argumentsOwner)
         {
             IModuleReferenceResolveContext context = argumentsOwner.GetResolveContext();
+            var searchDomainFactory = argumentsOwner.GetSolution().GetComponent<SearchDomainFactory>();
 
-            ISearchDomain searchDomain = SearchDomainFactory.Instance.CreateSearchDomain(
+            ISearchDomain searchDomain = searchDomainFactory.CreateSearchDomain(
                 module.GetPsiServices().Modules
                       .GetModules()
                       .Where(m => m.References(module, context) || module.References(m, context))
