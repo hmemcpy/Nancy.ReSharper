@@ -48,4 +48,38 @@
       <attribute ctor="M:JetBrains.Annotations.RazorSectionAttribute.#ctor" />
     </parameter>
   </member>
+  <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers`1.Partial(System.String)">
+    <parameter name="viewName">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcViewAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.LocalizationRequiredAttribute.#ctor(System.Boolean)">
+        <argument>false</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers`1.Partial(System.String,System.Object)">
+    <parameter name="viewName">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcViewAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.LocalizationRequiredAttribute.#ctor(System.Boolean)">
+        <argument>false</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Initialize(Nancy.ViewEngines.Razor.RazorViewEngine,Nancy.ViewEngines.IRenderContext,System.Object)">
+    <parameter name="model">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcModelTypeAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.RenderView(Nancy.ViewEngines.ViewLocationResult,System.Object,Nancy.ViewEngines.IRenderContext)">
+    <parameter name="model">
+      <attribute ctor="M:JetBrains.Annotations.AspMvcModelTypeAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Nancy.ViewEngines.Razor.UrlHelpers`1.Content(System.String)">
+    <parameter name="path">
+      <attribute ctor="M:JetBrains.Annotations.LocalizationRequiredAttribute.#ctor(System.Boolean)">
+        <argument>false</argument>
+      </attribute>
+      <attribute ctor="M:JetBrains.Annotations.PathReferenceAttribute.#ctor" />
+    </parameter>
+  </member>
 </assembly>

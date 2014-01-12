@@ -221,9 +221,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         }
 
         [NotNull]
-        public static FileSystemPath GetControllerFolder([CanBeNull] IProject project, [CanBeNull] string area,
-            [CanBeNull] string controllerName,
-            MvcKind mvcKind = MvcKind.View)
+        public static FileSystemPath GetControllerFolder([CanBeNull] IProject project, [CanBeNull] string area, [CanBeNull] string controllerName, MvcKind mvcKind = MvcKind.View)
         {
             if ((project == null) || (controllerName == null))
             {
@@ -261,8 +259,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             return cachedData.GetValue(argumentsOwner, () => GetModulesNotCached(argumentsOwner));
         }
 
-        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>>
-            GetModulesNotCached([NotNull] IArgumentsOwner argumentsOwner)
+        private static ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> GetModulesNotCached([NotNull] IArgumentsOwner argumentsOwner)
         {
             argumentsOwner.AssertIsValid("argumentsOwner is invalid");
             IPsiModule psiModule = argumentsOwner.GetPsiModule();
