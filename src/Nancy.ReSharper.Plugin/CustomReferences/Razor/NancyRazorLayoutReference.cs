@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
@@ -12,7 +14,7 @@ using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
 {
-    public class NancyRazorLayoutReference<TToken> : RazorFileReference<TToken>, IRazorLayoutReference
+    public class NancyRazorLayoutReference<TToken> : RazorFileReference<TToken>, IRazorLayoutReference, IMvcViewReference
         where TToken : class, ITreeNode
     {
         public NancyRazorLayoutReference(IExpression owner, IQualifier qualifier, TToken token,
@@ -41,6 +43,16 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
             return base.IsValid() && myOwner.ConstantValue.IsString();
         }
 
+        public Refers RefersToDeclaredElement(IDeclaredElement declaredElement)
+        {
+            IResolveResult resolveResult = Resolve().Result;
+            if (Equals(resolveResult.DeclaredElement, declaredElement))
+                return Refers.YES;
+
+            return resolveResult.Candidates.Any(element => Equals(element, declaredElement)) ? Refers.MAYBE : Refers.NO;
+
+        }
+
         public override ResolveResultWithInfo GetResolveResult(ISymbolTable symbolTable, string referenceName)
         {
             ResolveResultWithInfo resolveResult = base.GetResolveResult(symbolTable, referenceName);
@@ -54,6 +66,21 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
         {
             return MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>.CheckViewResolveResult(
                 MvcUtil.CheckMvcResolveResult(resolveInfo, MvcKind.View), this);
+        }
+
+        public MvcKind MvcKind
+        {
+            get { return MvcKind.View; }
+        }
+
+        public bool IsInternalValid
+        {
+            get { return IsValid(); }
+        }
+
+        public FileSystemPath GetControllerFolder()
+        {
+            return NancyUtil.GetControllerFolder(myOwner.GetProject(), null);
         }
     }
 }

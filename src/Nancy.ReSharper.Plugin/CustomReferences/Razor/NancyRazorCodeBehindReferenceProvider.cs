@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
-using JetBrains.ReSharper.Psi.Html.Utils;
 using JetBrains.ReSharper.Psi.Razor;
 using JetBrains.ReSharper.Psi.Razor.Impl.References;
 using JetBrains.ReSharper.Psi.Razor.References;

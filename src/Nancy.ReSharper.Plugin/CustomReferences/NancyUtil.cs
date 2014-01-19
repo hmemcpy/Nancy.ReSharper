@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application.Progress;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.Caches;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
@@ -298,7 +299,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 if (declaredElement.IsAbstract)
                 {
                     // with inheritors
-                    return GetAvailableModules(psiModule, argumentsOwner, baseClass: declaredElement)
+                    return GetAvailableModules(psiModule, argumentsOwner.GetResolveContext(), baseClass: declaredElement)
                         .SelectMany(_ => _.Value)
                         .GroupBy(
                             @class => new { area = GetControllerArea(@class), controller = GetControllerName(@class) })
@@ -314,7 +315,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             }
 
             return (from tuple in moduleNames
-                let availableModules = GetAvailableModules(psiModule, argumentsOwner, areas: new[] { tuple.A }, includingIntermediateControllers: tuple.D)
+                let availableModules = GetAvailableModules(psiModule, argumentsOwner.GetResolveContext(), includingIntermediateControllers: tuple.D)
                 select JetTuple.Of(tuple.A, tuple.B, tuple.C, tuple.B == null
                     ? (ICollection<IClass>)new IClass[] { null }
                     : availableModules.GetValuesCollection(tuple.B)))
@@ -595,25 +596,24 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         }
 
         public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module,
-                                                                       [CanBeNull] IArgumentsOwner argumentsOwner,
-                                                                       [CanBeNull] ICollection<string> areas = null,
+                                                                       IModuleReferenceResolveContext context,
                                                                        bool includingIntermediateControllers = false,
                                                                        ITypeElement baseClass = null)
         {
-            var searchDomain = GetSearchDomain(module, argumentsOwner);
+            var searchDomain = GetSearchDomain(module, context);
 
-            return GetAvailableModules(module, argumentsOwner, searchDomain, includingIntermediateControllers, baseClass);
+            return GetAvailableModules(module, searchDomain, context, includingIntermediateControllers, baseClass);
         }
 
         public static OneToListMap<string, IClass> GetAvailableModules([NotNull] IPsiModule module, 
-            IArgumentsOwner argumentsOwner, 
-            [NotNull] ISearchDomain searchDomain, 
+            [NotNull] ISearchDomain searchDomain,
+            IModuleReferenceResolveContext contex, 
             bool includingIntermediateControllers = false, 
             ITypeElement baseClass = null)
         {
             ITypeElement[] typeElements;
 
-            ITypeElement nancyModuleInterface = GetNancyModuleInterface(argumentsOwner, module);
+            ITypeElement nancyModuleInterface = GetNancyModuleInterface(module, contex);
 
             if (baseClass != null)
             {
