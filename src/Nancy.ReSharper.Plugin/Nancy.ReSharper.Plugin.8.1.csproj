@@ -69,7 +69,6 @@
     <Compile Include="CustomReferences\Razor\NancyRazorCodeBehindReferenceProvider.cs" />
     <Compile Include="CustomReferences\Razor\NancyRazorCSharpCodeBehindReferenceProvider.cs" />
     <Compile Include="CustomReferences\Razor\NancyRazorCSharpReferenceProviderFactory.cs" />
-    <Compile Include="CustomReferences\Razor\NancyRazorFolderReference.cs" />
     <Compile Include="CustomReferences\Razor\NancyRazorLayoutReference.cs" />
     <Compile Include="CustomReferences\Razor\NancyReferenceSymbolTableUtil.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />

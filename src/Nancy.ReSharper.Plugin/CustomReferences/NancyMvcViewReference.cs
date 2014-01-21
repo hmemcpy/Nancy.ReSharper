@@ -22,8 +22,7 @@ using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
-    public class NancyMvcViewReference : MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>,
-        ISmartCompleatebleReference
+    public class NancyMvcViewReference : MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>, ISmartCompleatebleReference
     {
         private readonly MvcCache mvcCache;
         private readonly MvcKind mvcKind;
@@ -63,56 +62,50 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             string name = GetName();
             IProject project = myOwner.GetProject();
             ISymbolTable symbolTable = EmptySymbolTable.INSTANCE;
-            using (
-                IEnumerator<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> enumerator =
-                    names.GetEnumerator())
+            foreach (JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>> tuple in names)
             {
-                while (enumerator.MoveNext())
+                ISymbolTable symbolTable2;
+                if (tuple.C == MvcUtil.DeterminationKind.ImplicitByContainingMember)
                 {
-                    JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>> tuple = enumerator.Current;
-                    ISymbolTable symbolTable2;
-                    if (tuple.C == MvcUtil.DeterminationKind.ImplicitByContainingMember)
-                    {
-                        symbolTable2 = (
-                            from @class in tuple.D
-                            where @class != null && @class.IsValid()
-                            select
-                                GetReferenceSymbolTable(@class, useReferenceName ? name : null, mvcKind, version,
-                                    tuple.A)).Merge(null);
-                    }
-                    else
-                    {
-                        symbolTable2 = GetReferenceSymbolTable(psiServices, tuple.A, tuple.B,
-                            useReferenceName ? name : null, mvcKind, project, version);
-                    }
-                    if (useReferenceName && symbolTable2.GetAllSymbolInfos().IsEmpty() &&
-                        name.IndexOfAny(FileSystemDefinition.InvalidPathChars) == -1)
-                    {
-                        var symbolTable3 = new SymbolTable(psiServices, null);
-                        try
-                        {
-                            foreach (
-                                string current in
-                                    mvcCache.GetLocations(project, MvcUtil.GetViewLocationType(mvcKind, tuple.A), true))
-                            {
-                                string path = string.Format(current, name, tuple.B, tuple.A);
-                                symbolTable3.AddSymbol(new PathDeclaredElement(psiServices, FileSystemPath.Parse(path)));
-                            }
-                        }
-                        catch (InvalidPathException)
-                        {
-                        }
-                        symbolTable2 = symbolTable3;
-                    }
-                    symbolTable = symbolTable.Merge(symbolTable2);
+                    symbolTable2 = (from @class in tuple.D
+                                    where @class != null && @class.IsValid()
+                                    select GetReferenceSymbolTable(@class, useReferenceName ? name : null, mvcKind, version, tuple.A)).Merge();
                 }
+                else
+                {
+                    symbolTable2 = GetReferenceSymbolTable(psiServices, tuple.A, tuple.B, useReferenceName ? name : null, mvcKind, project, version);
+                }
+                if (useReferenceName && symbolTable2.GetAllSymbolInfos().IsEmpty() &&
+                    name.IndexOfAny(FileSystemDefinition.InvalidPathChars) == -1)
+                {
+                    var symbolTable3 = new SymbolTable(psiServices);
+                    try
+                    {
+                        bool hasExtension = Path.HasExtension(name);
+
+                        foreach (string location in mvcCache.GetLocations(project, MvcUtil.GetViewLocationType(mvcKind, tuple.A)))
+                        {
+                            string path = string.Format(location, name, tuple.B, tuple.A);
+                            if (hasExtension)
+                            {
+                                path = Path.ChangeExtension(path, null);
+                            }
+                            symbolTable3.AddSymbol(new PathDeclaredElement(psiServices, FileSystemPath.Parse(path)));
+                        }
+                    }
+                    catch (InvalidPathException)
+                    {
+                    }
+                    symbolTable2 = symbolTable3;
+                }
+                symbolTable = symbolTable.Merge(symbolTable2);
             }
-            return symbolTable.Distinct(null);
+
+            return symbolTable.Distinct();
         }
 
         private static ISymbolTable GetReferenceSymbolTable(IPsiServices psiServices, [CanBeNull] string area,
-            [CanBeNull] string controller, [CanBeNull] string view, MvcKind mvcKind, [CanBeNull] IProject project,
-            Version version)
+            [CanBeNull] string controller, [CanBeNull] string view, MvcKind mvcKind, [CanBeNull] IProject project, Version version)
         {
             if (project == null)
             {
@@ -121,7 +114,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             ISolution solution = project.GetSolution();
             var component = solution.GetComponent<MvcCache>();
             IEnumerable<IProject> searcheableProjects = GetSearcheableProjects(project);
-            bool flag = false;
+            bool hasExtension = false;
             if (view != null)
             {
                 if (view.IndexOfAny(FileSystemDefinition.InvalidPathChars) != -1)
@@ -132,7 +125,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 {
                     return EmptySymbolTable.INSTANCE;
                 }
-                flag = !Path.HasExtension(view);
+                hasExtension = Path.HasExtension(view);
             }
             ISymbolTable symbolTable = EmptySymbolTable.INSTANCE;
             foreach (IProject current in searcheableProjects)
@@ -150,15 +143,14 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                         {
                             fileSystemPath = WebPathReferenceUtil.GetRootPath(project).Combine(fileSystemPath);
                         }
-                        symbolTable2 =
-                            symbolTable2.Merge(new DeclaredElementsSymbolTable<PathDeclaredElement>(psiServices, new[]
+                        symbolTable2 = symbolTable2.Merge(new DeclaredElementsSymbolTable<PathDeclaredElement>(psiServices, new[]
                             {
                                 new PathDeclaredElement(psiServices, fileSystemPath)
                             }, 0, null));
                     }
                 }
                 List<string> list = null;
-                if (flag && version.Major >= 4)
+                if (hasExtension)
                 {
                     list = component.GetDisplayModes(current).ToList();
                 }
@@ -221,15 +213,11 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                                                 possibleNames.Add(Path.ChangeExtension(text3, current3 + extension));
                                             }
                                         }
-                                        preFilter =
-                                            ((IProjectItem item) =>
-                                                extensionFilter(item) && possibleNames.Contains(item.Location.FullPath));
+                                        preFilter = item => extensionFilter(item) && possibleNames.Contains(item.Location.FullPath);
                                     }
-                                    symbolTable2 =
-                                        symbolTable2.Merge(PathReferenceUtil.GetSymbolTableByPath(
+                                    symbolTable2 = symbolTable2.Merge(PathReferenceUtil.GetSymbolTableByPath(
                                             projectFolder.Location, psiServices, null, null, false, true,
-                                            (IProjectItem projectItem) => GetViewName(projectItem.Location,
-                                                    location), preFilter));
+                                            projectItem => GetViewName(projectItem.Location, location), preFilter));
                                 }
                             }
                         }
