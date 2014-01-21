@@ -1,0 +1,28 @@
+<assembly name="Nancy.ViewEngines.Razor">
+  <assembly>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{0}.md</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{0}.markdown</argument>
+    </attribute>    
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{0}.md</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{0}.markdown</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{1}\{0}.md</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{1}\{0}.markdown</argument>
+    </attribute>    
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{1}\{0}.md</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{1}\{0}.markdown</argument>
+    </attribute>    
+  </assembly>
+</assembly>

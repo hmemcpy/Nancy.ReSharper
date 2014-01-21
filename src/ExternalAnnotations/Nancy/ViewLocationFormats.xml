@@ -1,0 +1,40 @@
+<assembly name="Nancy">
+  <assembly>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{0}.sshtml</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{0}.htm</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{0}.html</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{0}.sshtml</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{0}.htm</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{0}.html</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{1}\{0}.sshtml</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{1}\{0}.htm</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\{1}\{0}.html</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{1}\{0}.sshtml</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{1}\{0}.htm</argument>
+    </attribute>
+    <attribute ctor="M:JetBrains.Annotations.AspMvcViewLocationFormatAttribute.#ctor(System.String)">
+      <argument>~\Views\{1}\{0}.html</argument>
+    </attribute>
+  </assembly>
+</assembly>

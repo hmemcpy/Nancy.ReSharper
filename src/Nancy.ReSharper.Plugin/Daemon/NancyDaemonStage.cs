@@ -40,10 +40,10 @@ namespace Nancy.ReSharper.Plugin.Daemon
 
             return new[]
             {
-                new MvcDaemonStageProcess(searchDomainFactory,
-                                          process,
-                                          process.GetStageProcess<CollectUsagesStageProcess>(),
-                                          settings)
+                new NancyDaemonStageProcess(searchDomainFactory,
+                                            process,
+                                            process.GetStageProcess<CollectUsagesStageProcess>(),
+                                            settings)
             };
         }
 
