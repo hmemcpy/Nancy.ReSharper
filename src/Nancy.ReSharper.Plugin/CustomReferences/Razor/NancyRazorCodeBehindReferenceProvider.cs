@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
 using JetBrains.ReSharper.Psi.Razor;
@@ -46,8 +47,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
                 return EmptyArray<IReference>.Instance;
             }
 
-            IExpression annotatedSectionExpression = razorServices.GetAnnotatedLiteralExpression(element,
-                RazorSectionExternalAttributeName, assignmentChecker);
+            IExpression annotatedSectionExpression = razorServices.GetAnnotatedLiteralExpression(element, RazorSectionExternalAttributeName, assignmentChecker);
             if (annotatedSectionExpression is TLiteralExpression && annotatedSectionExpression.ConstantValue.IsString())
             {
                 return new IReference[]
@@ -56,8 +56,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
                 };
             }
 
-            IExpression annotatedLiteralExpression = razorServices.GetAnnotatedLiteralExpression(element,
-                RazorLayoutExternalAttributeName, assignmentChecker);
+            IExpression annotatedLiteralExpression = razorServices.GetAnnotatedLiteralExpression(element, RazorLayoutExternalAttributeName, assignmentChecker);
             if (annotatedLiteralExpression == null || !annotatedLiteralExpression.ConstantValue.IsString())
             {
                 return EmptyArray<IReference>.Instance;
@@ -71,7 +70,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
                                                .FirstOrDefault();
 
             FileSystemPath location = sourceFile.GetLocation();
-            PathQualifier pathQualifier = (!location.IsEmpty) ? new PathQualifier(solution, location.Directory, false) : null;
+            PathQualifier pathQualifier = (!location.IsEmpty) ? new PathQualifier(solution, location.Directory) : null;
+
             return new IReference[]
             {
                 new NancyRazorLayoutReference<ITreeNode>(annotatedLiteralExpression, pathQualifier,

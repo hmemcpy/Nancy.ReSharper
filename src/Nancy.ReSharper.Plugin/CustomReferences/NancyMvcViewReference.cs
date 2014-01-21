@@ -22,8 +22,7 @@ using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
-    public class NancyMvcViewReference : MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>,
-        ISmartCompleatebleReference
+    public class NancyMvcViewReference : MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration>, ISmartCompleatebleReference
     {
         private readonly MvcCache mvcCache;
         private readonly MvcKind mvcKind;
