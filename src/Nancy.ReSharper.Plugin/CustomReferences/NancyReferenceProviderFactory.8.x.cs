@@ -4,9 +4,9 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
 {
     public partial class NancyReferenceProviderFactory 
     {
-        private NancyMvcReferenceProvider CreateProvider(Version version)
+        private NancyMvcReferenceProvider CreateProvider()
         {
-            return new NancyMvcReferenceProvider(version);
+            return new NancyMvcReferenceProvider();
         }
     }
 }

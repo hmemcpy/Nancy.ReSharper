@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
-using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Search;
-using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
