@@ -34,13 +34,12 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
             if (projectFile == null)
                 return null;
 
-            Version version;
-            if (!projectFile.IsProjectReferencingNancy(out version))
+            if (!projectFile.IsProjectReferencingNancy())
             {
                 return null;
             }
 
-            return CreateProvider(version);
+            return CreateProvider();
         }
 
         private void FireOnChanged()

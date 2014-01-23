@@ -1,13 +1,18 @@
 using System;
+using System.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Razor;
 using JetBrains.ReSharper.Psi.Razor.CSharp.Impl.References;
+using JetBrains.ReSharper.Psi.Razor.Impl.Generate;
 using JetBrains.ReSharper.Psi.Razor.Impl.References;
 using JetBrains.ReSharper.Psi.Razor.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.Web.Cache;
 using JetBrains.Util;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
@@ -34,9 +39,29 @@ namespace Nancy.ReSharper.Plugin.CustomReferences.Razor
             if (file is IRazorFile)
                 return new RazorReferenceProvider<IAssignmentExpression>(razorServices, assignmentChecker);
             if (file is ICSharpFile)
-                return new NancyRazorCSharpCodeBehindReferenceProvider(solution, razorServices, assignmentChecker);
-            
+            {
+                bool isNancyRazorPage = IsNancyRazorPage(sourceFile);
+                if (isNancyRazorPage)
+                {
+                    return new NancyRazorCSharpCodeBehindReferenceProvider(solution, razorServices, assignmentChecker);
+                }
+
+                return new RazorCSharpCodeBehindReferenceProvider(solution, razorServices, assignmentChecker);
+            }
+
             return null;
+        }
+
+        private static bool IsNancyRazorPage(IPsiSourceFile sourceFile)
+        {
+             var project = sourceFile.GetProject();
+            if (!project.IsProjectReferencingNancy() || !project.IsProjectReferencingNancyRazorViewEngine())
+            {
+                return false;
+            }
+
+            string pageBaseType = WebConfigCache.GetData(sourceFile).GetRazorBasePageType(isCSharp: true);
+            return !string.IsNullOrWhiteSpace(pageBaseType) && pageBaseType.StartsWith("Nancy.ViewEngines.Razor.NancyRazorViewBase");
         }
     }
 }

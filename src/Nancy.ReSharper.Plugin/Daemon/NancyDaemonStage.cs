@@ -32,8 +32,7 @@ namespace Nancy.ReSharper.Plugin.Daemon
                 return Enumerable.Empty<IDaemonStageProcess>();
             }
 
-            Version version;
-            if (!projectFile.IsProjectReferencingNancy(out version))
+            if (!projectFile.IsProjectReferencingNancy())
             {
                 return Enumerable.Empty<IDaemonStageProcess>();
             }
@@ -50,12 +49,6 @@ namespace Nancy.ReSharper.Plugin.Daemon
         public ErrorStripeRequest NeedsErrorStripe(IPsiSourceFile sourceFile, IContextBoundSettingsStore settings)
         {
             return ErrorStripeRequest.NONE;
-        }
-
-        internal static bool IsNancyProject(IProjectElement project)
-        {
-            Version version;
-            return project.IsProjectReferencingNancy(out version);
         }
     }
 }
