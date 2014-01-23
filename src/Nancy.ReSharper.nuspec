@@ -13,7 +13,7 @@
     <iconUrl>https://raw.github.com/NancyFx/Nancy.ReSharper/master/nancy.png</iconUrl>
     <copyright>Copyright &#x00A9; 2013 Igal Tabachnik</copyright>
     <tags>nancy nancyfx ssdp super duper happy path simple</tags>
-    <releaseNotes>Improved ReSharper support for Razor View Engine for Nancy</releaseNotes>
+    <releaseNotes>Fixed an issue where MVC Razor views would be affected by the plugin</releaseNotes>
     <dependencies>
       <dependency id="Resharper" version="[8.1,8.2)"/>
     </dependencies>
