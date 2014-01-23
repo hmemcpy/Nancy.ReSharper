@@ -18,8 +18,6 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         where TExpression : class, IArgumentsOwner, IInvocationInfo, ITreeNode
         where TMethod : class, ITypeOwnerDeclaration, ITypeMemberDeclaration
     {
-        private readonly Version myVersion;
-
         public IReference[] GetReferences(ITreeNode element, IReference[] oldReferences)
         {
             if (oldReferences != null && oldReferences.Any() && oldReferences.All(reference =>
@@ -70,7 +68,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                         .DefaultIfEmpty(JetTuple.Of((string)null, (string)null, MvcUtil.DeterminationKind.Explicit, (ICollection<IClass>)null)).ToList();
                     return new IReference[]
                     {
-                        GetMvcViewReference(mvcLiteral, list, jt.A, myVersion)
+                        GetMvcViewReference(mvcLiteral, list, jt.A, new Version())
                     };
                 default:
                     return EmptyArray<IReference>.Instance;
@@ -115,7 +113,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                         continue;
                     case MvcKind.View:
                     case MvcKind.PartialView:
-                        yield return new MvcImplicitViewReference<TExpression, TLiteral, TMethod>(expression, jt.A, myVersion);
+                        yield return new MvcImplicitViewReference<TExpression, TLiteral, TMethod>(expression, jt.A, new Version());
                         continue;
                     default:
                         continue;

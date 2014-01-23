@@ -12,7 +12,7 @@ using JetBrains.Util.DataStructures;
 
 namespace Nancy.ReSharper.Plugin.CustomReferences
 {
-    public partial class NancyMvcReferenceProvider : NancyMvcReferenceProviderBase<ICSharpLiteralExpression, ICSharpArgumentsOwner, IMethodDeclaration>
+    public class NancyMvcReferenceProvider : NancyMvcReferenceProviderBase<ICSharpLiteralExpression, ICSharpArgumentsOwner, IMethodDeclaration>
     {
         protected override MvcActionReference<ICSharpLiteralExpression> GetMvcActionReference([NotNull] IExpression literal, [NotNull] ICSharpArgumentsOwner argumentsExpression)
         {

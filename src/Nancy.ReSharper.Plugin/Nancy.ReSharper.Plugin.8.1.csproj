@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.8.x.cs" />
-    <Compile Include="CustomReferences\NancyMvcReferenceProvider.8.x.cs" />
     <Compile Include="CustomReferences\NancyMvcViewReference.cs" />
     <Compile Include="CustomReferences\NancyMvcReferenceProviderBase.cs" />
     <Compile Include="CustomReferences\NancyMvcControllerReference.cs" />
