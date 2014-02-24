@@ -11,15 +11,16 @@
     <description>Nancy plugin for ReSharper adds navigation and intellisense support for NancyFx (http://nancyfx.org) in ReSharper, for super-duper-happy-path web development!</description>
     <projectUrl>https://github.com/NancyFx/Nancy.ReSharper</projectUrl>
     <iconUrl>https://raw.github.com/NancyFx/Nancy.ReSharper/master/nancy.png</iconUrl>
-    <copyright>Copyright &#x00A9; 2013 Igal Tabachnik</copyright>
+    <copyright>Copyright &#x00A9; 2013, 2014 Igal Tabachnik</copyright>
     <tags>nancy nancyfx ssdp super duper happy path simple</tags>
     <releaseNotes>Fixed an issue where MVC Razor views would be affected by the plugin</releaseNotes>
     <dependencies>
-      <dependency id="Resharper" version="[8.1,8.2)"/>
+      <dependency id="Resharper" version="[8.1,8.3)"/>
     </dependencies>
   </metadata>
   <files>
     <file src="..\output\$configuration$\8.1\*.*" target="ReSharper\v8.1\plugins"/>
+    <file src="..\output\$configuration$\8.2\*.*" target="ReSharper\v8.2\plugins"/>
     <file src="ExternalAnnotations\**\*.xml" target="ReSharper\vAny\annotations"/>
   </files>
 </package>
