@@ -72,7 +72,6 @@
     <Compile Include="CustomReferences\Razor\NancyReferenceSymbolTableUtil.cs" />
     <Compile Include="Daemon\NancyDaemonStage.cs" />
     <Compile Include="Daemon\NancyDaemonStageProcess.cs" />
-    <Compile Include="LiveLoadingHack\LiveLoadingRestartRequired.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpFileTemplatesSupport.cs" />
     <Compile Include="LiveTemplates\NancyAspCSharpProjectScopeProvider.cs" />
     <Compile Include="LiveTemplates\NancyRazorCSharpFileTemplatesSupport.cs" />
