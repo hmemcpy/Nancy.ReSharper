@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Asp.CustomReferences;
+using JetBrains.ReSharper.Feature.Services.Asp.Search;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
@@ -18,6 +21,8 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
         where TExpression : class, IArgumentsOwner, IInvocationInfo, ITreeNode
         where TMethod : class, ITypeOwnerDeclaration, ITypeMemberDeclaration
     {
+        private static readonly Key<ICollection<string>> AllMvcNamesKey = new Key<ICollection<string>>("AllMvcMembersNames");
+
         public IReference[] GetReferences(ITreeNode element, IReference[] oldReferences)
         {
             if (oldReferences != null && oldReferences.Any() && oldReferences.All(reference =>
@@ -66,13 +71,25 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 case MvcKind.EditorTemplate:
                     var list = NancyUtil.GetModules(argumentExpression)
                         .DefaultIfEmpty(JetTuple.Of((string)null, (string)null, MvcUtil.DeterminationKind.Explicit, (ICollection<IClass>)null)).ToList();
-                    return new IReference[]
-                    {
-                        GetMvcViewReference(mvcLiteral, list, jt.A, new Version())
-                    };
+                    return new IReference[] { GetMvcViewReference(mvcLiteral, list, jt.A, new Version()) };
                 default:
                     return EmptyArray<IReference>.Instance;
             }
+        }
+
+        private static ICollection<string> GetAllMvcNames(TExpression expression)
+        {
+            ICollection<string> val = expression.UserData.GetData(AllMvcNamesKey);
+            if (val == null)
+            {
+                ISolution solution = expression.GetSolution();
+                var attributeNames = solution.GetComponent<MvcAttributeNames>();
+                val = new HashSet<string>(attributeNames.AttributeClrNamesToWatch.SelectMany(
+                    typeName => solution.GetMembersByAttributeName(typeName.ShortName)), StringComparer.OrdinalIgnoreCase);
+                expression.UserData.PutData(AllMvcNamesKey, val);
+            }
+
+            return val;
         }
 
         protected virtual MvcViewReference<ICSharpLiteralExpression, IMethodDeclaration> GetMvcViewReference(IExpression literal, ICollection<JetTuple<string, string, MvcUtil.DeterminationKind, ICollection<IClass>>> names, MvcKind mvcKind, Version version)

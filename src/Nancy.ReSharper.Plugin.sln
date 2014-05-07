@@ -1,13 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.8.1", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.8.1.csproj", "{B2A37F44-9C56-4818-962A-C95F8812A1C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.ReSharper.Plugin.8.2", "Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.8.2.csproj", "{9627E744-777A-4734-AAE8-0A84864AC788}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Nancy.ReSharper.Plugin", "Shared\Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.shproj", "{85A11BAA-2AB2-4782-9896-93A925494CF2}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.projitems*{b2a37f44-9c56-4818-962a-c95f8812a1c7}*SharedItemsImports = 4
+		Shared\Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.projitems*{9627e744-777a-4734-aae8-0a84864ac788}*SharedItemsImports = 4
+		Shared\Nancy.ReSharper.Plugin\Nancy.ReSharper.Plugin.projitems*{85a11baa-2ab2-4782-9896-93a925494cf2}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

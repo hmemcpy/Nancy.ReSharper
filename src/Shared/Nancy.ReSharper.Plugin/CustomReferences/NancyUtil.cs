@@ -652,5 +652,21 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                     (name, enumerable) => new KeyValuePair<string, IList<IClass>>(name, enumerable.ToList())),
                 StringComparer.OrdinalIgnoreCase);
         }
+
+        private static ISearchDomain GetSearchDomain(IPsiModule module, IModuleReferenceResolveContext context)
+        {
+            IPsiServices psiServices = module.GetPsiServices();
+            ISearchDomain searchDomain = psiServices.SearchDomainFactory.CreateSearchDomain(
+                module.GetPsiServices().Modules.GetModules()
+                      .Where(m => m.References(module, context) || module.References(m, context))
+                      .Prepend(module));
+
+            return searchDomain;
+        }
+
+        private static ITypeElement GetNancyModuleInterface(IPsiModule module, IModuleReferenceResolveContext context)
+        {
+            return TypeFactory.CreateTypeByCLRName("Nancy.INancyModule", module, context).GetTypeElement();
+        }
     }
 }

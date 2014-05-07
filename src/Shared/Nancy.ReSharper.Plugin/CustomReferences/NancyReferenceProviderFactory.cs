@@ -39,7 +39,7 @@ namespace Nancy.ReSharper.Plugin.CustomReferences
                 return null;
             }
 
-            return CreateProvider();
+            return new NancyMvcReferenceProvider();
         }
 
         private void FireOnChanged()

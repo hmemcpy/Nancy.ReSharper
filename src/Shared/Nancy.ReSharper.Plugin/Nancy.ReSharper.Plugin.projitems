@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>85a11baa-2ab2-4782-9896-93a925494cf2</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Nancy.ReSharper.Plugin</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyCustomReferencesSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyMvcActionReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyMvcAreaReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyMvcControllerReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyMvcReferenceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyMvcReferenceProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyReferenceProviderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\NancyUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\Razor\NancyRazorCodeBehindReferenceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\Razor\NancyRazorCSharpCodeBehindReferenceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\Razor\NancyRazorCSharpReferenceProviderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\Razor\NancyRazorLayoutReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomReferences\Razor\NancyReferenceSymbolTableUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Daemon\NancyDaemonStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Daemon\NancyDaemonStageProcess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTemplates\NancyAspCSharpFileTemplatesSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTemplates\NancyAspCSharpProjectScopeProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTemplates\NancyRazorCSharpFileTemplatesSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTemplates\NancyRazorCSharpProjectScopeProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiveTemplates\NancyRazorProjectScopeProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProjectModel\SuperSimpleProjectFileType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QuickFixes\NancyAspCSharpMvcQuickFixTemplateProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QuickFixes\NancyRazorCSharpMvcQuickFixTemplateProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\RazorCSharpNancyProjectFileLanguageService.cs" />
+  </ItemGroup>
+</Project>
