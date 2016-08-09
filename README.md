@@ -1,3 +1,7 @@
+## Update
+**As of August 9, 2016, this project is no longer maintained. If you're interested in becoming its maintainer, please drop me a line.**
+
+
 # **ReSharper <3 Nancy!**
 **Nancy plugin for ReSharper** adds navigation and intellisense support for [Nancy](http://nancyfx.org/) in [ReSharper](http://www.jetbrains.com/resharper/), for super-duper-happy-path web development!
 
